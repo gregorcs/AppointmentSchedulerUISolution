@@ -1,4 +1,4 @@
 # Appointment Scheduler UI Solution
-Uses Asp.net 6
+Uses Razor Pages
 
 *Created by Gregor Csatlos, Max Kendra, Aleksander Rouskov & Norbert Mojsej*
