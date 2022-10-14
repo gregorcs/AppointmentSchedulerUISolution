@@ -35,7 +35,7 @@ namespace AppointmentSchedulerUI.Pages.NewFolder
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, "user"),
+                    new Claim(ClaimTypes.Email, Credential.Email),
                 };
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal principal = new(identity);

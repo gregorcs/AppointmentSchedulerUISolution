@@ -9,7 +9,7 @@ namespace AppointmentSchedulerUI.Pages.Api_calls
         {
             var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("authenticate", Method.Post);
-            request.AddQueryParameter("username", credential.UserName);
+            request.AddQueryParameter("email", credential.Email);
             request.AddQueryParameter("password", credential.Password);
 
             request.AddParameter("text/plain", ParameterType.RequestBody);

@@ -11,7 +11,7 @@ namespace AppointmentSchedulerUI.Pages.Api_calls
         public async Task<IActionResult> PostAccountAsync(SignupCredentials accountToSave)
         {
             var client = new RestClient(ServerUrl.Url);
-            var request = new RestRequest("create-admin", Method.Post);
+            var request = new RestRequest("create-account", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var body = JsonSerializer.Serialize(accountToSave);
             request.AddParameter("application/json", body, ParameterType.RequestBody);

@@ -1,6 +1,4 @@
-﻿ @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,7 +19,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @{ 
-                        if(HttpContextAccessor.HttpContext is not null && HttpContextAccessor.HttpContext.Request.Cookies["MyCookieAuth"] is not null)
+                        if (User.Identity.IsAuthenticated)
                         {
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
@@ -30,12 +28,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Setting">Settings</a>
                                 </li>
+                                <form method="post" class="form-inline" asp-page="/Account/Logout">
+                                    <button type="submit" class="m1-2 btn btn-link">Logout</button>
+                                </form>
                             </ul>
                         } else
                         {
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/account/login">Login</a>
+                                    <a class="nav-link text-dark" asp-page="/account/login">Log in</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-page="/account/signup">Sign up</a>
