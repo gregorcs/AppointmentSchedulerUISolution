@@ -1,11 +1,14 @@
+using AppointmentSchedulerUI.Pages.Account;
+using AppointmentSchedulerUI.Pages.Api_calls;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace AppointmentSchedulerUI.Pages.NewFolder
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         [BindProperty]
@@ -14,19 +17,25 @@ namespace AppointmentSchedulerUI.Pages.NewFolder
         {
         }
 
-        //an async method must return a task
         public async Task<IActionResult> OnPostAsync()
         {
-            //checks whether login.cshtml can bind info to its corresponding model
-            if (!ModelState.IsValid) return Page();
-
-            //checks if credentials are correct
-            if (Credential.UserName == "admin" && Credential.Password == "admin")
+            if (!ModelState.IsValid) {
+                return Page();
+                }
+            if (User.Identity is not null && User.Identity.IsAuthenticated)
             {
-                //creation of a claim / cookie
+                return RedirectToPage("/Index");
+            }
+            return await Login();
+        }
+
+        public async Task<IActionResult> Login()
+        {
+            if (await AuthenticateLogin.VerifyCredentials(Credential))
+            {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, "admin")
+                    new Claim(ClaimTypes.Name, "user"),
                 };
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
                 ClaimsPrincipal principal = new(identity);
@@ -34,19 +43,10 @@ namespace AppointmentSchedulerUI.Pages.NewFolder
                 await HttpContext.SignInAsync("MyCookieAuth", principal);
 
                 return RedirectToPage("/Index");
+            } else
+            {
+                return Page();
             }
-
-            return Page();
         }
-    }
-
-    public class Credential
-    {
-        [Required]
-        [Display(Name ="Name")]
-        public string UserName { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
     }
 }

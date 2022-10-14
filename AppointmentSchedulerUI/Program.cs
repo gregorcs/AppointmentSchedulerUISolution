@@ -1,7 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
-
+//add http accessor so we can access it in _layout
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // Add services to the container.
-builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
+builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
 {
     options.Cookie.Name = "MyCookieAuth";
 });
@@ -22,6 +23,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

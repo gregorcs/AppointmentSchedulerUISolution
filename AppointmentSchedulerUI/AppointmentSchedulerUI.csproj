@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\" />
+    <PackageReference Include="RestSharp" Version="108.0.2" />
   </ItemGroup>
 
 </Project>
