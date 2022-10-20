@@ -1,6 +1,9 @@
+using AppointmentSchedulerUI.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 //add http accessor so we can access it in _layout
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IAccountRepository, AccountRepository>();
 // Add services to the container.
 builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
 {

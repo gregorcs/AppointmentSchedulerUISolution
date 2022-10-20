@@ -1,5 +1,4 @@
 using AppointmentSchedulerUI.Pages.Account;
-using AppointmentSchedulerUI.Pages.Api_calls;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +7,7 @@ using System.Security.Claims;
 
 namespace AppointmentSchedulerUI.Pages.NewFolder
 {
-    [AllowAnonymous]
+    
     public class LoginModel : PageModel
     {
         [BindProperty]
@@ -28,10 +27,10 @@ namespace AppointmentSchedulerUI.Pages.NewFolder
             }
             return await Login();
         }
-
+        //cookie removed manually crashes when loging out
         public async Task<IActionResult> Login()
         {
-            if (await AuthenticateLogin.VerifyCredentials(Credential))
+            if (false)
             {
                 var claims = new List<Claim>
                 {

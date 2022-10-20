@@ -1,5 +1,6 @@
+using AppointmentSchedulerUI.Controllers;
 using AppointmentSchedulerUI.Pages.Account;
-using AppointmentSchedulerUI.Pages.Api_calls;
+using AppointmentSchedulerUI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -7,17 +8,24 @@ namespace AppointmentSchedulerUI.Pages
 {
     public class SignupModel : PageModel
     {
+        private readonly AccountController _accountController;
+
+        public SignupModel(AccountController accountController)
+        {
+            _accountController = accountController;
+        }
+
         [BindProperty]
         public SignupCredentials AccountToSave { get; set; }
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<ViewResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
-            var postAccount = new PostAccount();
-            return await postAccount.PostAccountAsync(AccountToSave);
+            //TODO enter some error thing here
+            if (!ModelState.IsValid) return new ViewResult();
+            return await _accountController.Save(AccountToSave);
         }
     }
 }
