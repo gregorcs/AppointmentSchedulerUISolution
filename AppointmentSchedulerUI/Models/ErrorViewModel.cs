@@ -1,4 +1,4 @@
-namespace Test.Models
+namespace AppointmentSchedulerUI.Models
 {
     public class ErrorViewModel
     {

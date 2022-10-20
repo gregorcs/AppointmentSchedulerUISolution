@@ -1,4 +1,4 @@
-﻿namespace AppointmentSchedulerUI.Pages
+﻿namespace AppointmentSchedulerUI.Views
 {
     public class ServerUrl
     {

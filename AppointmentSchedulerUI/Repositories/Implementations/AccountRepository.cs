@@ -1,10 +1,12 @@
-﻿using AppointmentSchedulerUI.Pages;
-using AppointmentSchedulerUI.Pages.Account;
+﻿using AppointmentSchedulerUI.Controllers;
+using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUI.Views;
+using AppointmentSchedulerUILibrary;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System.Text.Json;
 
-namespace AppointmentSchedulerUI.Repositories
+namespace AppointmentSchedulerUI.Repositories.Implementations
 {
     public class AccountRepository : IAccountRepository
     {
@@ -22,14 +24,13 @@ namespace AppointmentSchedulerUI.Repositories
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async static Task<bool> VerifyCredentials(Credential credential)
+        public async Task<bool> VerifyCredentials(Credential credentials)
         {
             using var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("authenticate", Method.Post);
-            request.AddQueryParameter("email", credential.Email);
-            request.AddQueryParameter("password", credential.Password);
-
-            request.AddParameter("text/plain", ParameterType.RequestBody);
+            request.AddHeader("Content-Type", "application/json");
+            var body = JsonSerializer.Serialize(credentials);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
             RestResponse response = await client.ExecuteAsync(request);
             return response.IsSuccessStatusCode;
         }

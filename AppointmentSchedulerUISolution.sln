@@ -4,11 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentSchedulerUI", "AppointmentSchedulerUI\AppointmentSchedulerUI.csproj", "{82E1A72F-0D29-40C8-A508-CA9EE006085D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{30E8C5C2-744B-42CC-ADE7-829402B2E1D5} = {30E8C5C2-744B-42CC-ADE7-829402B2E1D5}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentSchedulerLibrary", "AppointmentSchedulerLibrary\AppointmentSchedulerLibrary.csproj", "{30E8C5C2-744B-42CC-ADE7-829402B2E1D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentSchedulerUILibrary", "AppointmentSchedulerUILibrary\AppointmentSchedulerUILibrary.csproj", "{95264F5A-2B68-4FAB-A2B8-70083EB80CCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +17,10 @@ Global
 		{82E1A72F-0D29-40C8-A508-CA9EE006085D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82E1A72F-0D29-40C8-A508-CA9EE006085D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82E1A72F-0D29-40C8-A508-CA9EE006085D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30E8C5C2-744B-42CC-ADE7-829402B2E1D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30E8C5C2-744B-42CC-ADE7-829402B2E1D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30E8C5C2-744B-42CC-ADE7-829402B2E1D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30E8C5C2-744B-42CC-ADE7-829402B2E1D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95264F5A-2B68-4FAB-A2B8-70083EB80CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95264F5A-2B68-4FAB-A2B8-70083EB80CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95264F5A-2B68-4FAB-A2B8-70083EB80CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95264F5A-2B68-4FAB-A2B8-70083EB80CCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

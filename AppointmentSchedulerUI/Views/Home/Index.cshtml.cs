@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AppointmentSchedulerUI.Pages
+namespace AppointmentSchedulerUI.Views.Home
 {
     [Authorize]
     public class IndexModel : PageModel

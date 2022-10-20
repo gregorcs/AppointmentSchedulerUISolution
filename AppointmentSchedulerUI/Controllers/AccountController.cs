@@ -1,6 +1,8 @@
-﻿using AppointmentSchedulerUI.Pages.Account;
-using AppointmentSchedulerUI.Repositories;
+﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUILibrary;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -8,7 +10,12 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
-        public IActionResult Login()
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult Create()
         {
             return View();
         }
@@ -18,15 +25,32 @@ namespace AppointmentSchedulerUI.Controllers
             _accountRepository = accountRepository;
         }
 
-        public async Task<ViewResult> Save(SignupCredentials credentials)
+        public async Task<ViewResult> RegisterAccount(SignupCredentials credentials)
         {
             var result = await _accountRepository.Save(credentials);
-            return View(result);
-        }
-
-        public IActionResult Authenticate(Credential credential)
-        {
             return View();
         }
+
+        public async Task<IActionResult> Login(Credential credential)
+        {
+            if (await _accountRepository.VerifyCredentials(credential))
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, credential.Email),
+                };
+                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                ClaimsPrincipal principal = new(identity);
+
+                await HttpContext.SignInAsync("MyCookieAuth", principal);
+                return RedirectToAction("LoggedIn");
+            }
+            return View();
+        }
+
+        public IActionResult LoggedIn()
+        {
+            return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
+        } 
     }
 }

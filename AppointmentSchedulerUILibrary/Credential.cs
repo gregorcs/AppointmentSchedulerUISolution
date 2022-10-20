@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentSchedulerUI.Pages.Account
+namespace AppointmentSchedulerUILibrary
 {
     public class Credential
     {

@@ -1,4 +1,5 @@
-using AppointmentSchedulerUI.Repositories;
+using AppointmentSchedulerUI.Repositories.Implementations;
+using AppointmentSchedulerUI.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

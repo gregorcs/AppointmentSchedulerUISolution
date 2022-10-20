@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppointmentSchedulerUI.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Test.Models;
 
-namespace Test.Controllers
+namespace AppointmentSchedulerUI.Controllers
 {
     public class HomeController : Controller
     {
