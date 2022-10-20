@@ -8,6 +8,11 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
