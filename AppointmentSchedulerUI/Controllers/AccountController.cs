@@ -25,7 +25,7 @@ namespace AppointmentSchedulerUI.Controllers
             _accountRepository = accountRepository;
         }
 
-        public async Task<ViewResult> RegisterAccount(SignupCredentials credentials)
+        public async Task<ViewResult> RegisterAccount(SignupCredential credentials)
         {
             var result = await _accountRepository.Save(credentials);
             return View();

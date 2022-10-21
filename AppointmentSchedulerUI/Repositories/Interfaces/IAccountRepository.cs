@@ -1,9 +1,8 @@
-﻿using AppointmentSchedulerUI.Controllers;
-using AppointmentSchedulerUILibrary;
+﻿using AppointmentSchedulerUILibrary;
 
 namespace AppointmentSchedulerUI.Repositories.Interfaces
 {
-    public interface IAccountRepository : ICrudRepository<SignupCredentials, int>
+    public interface IAccountRepository : ICrudRepository<SignupCredential, int>
     {
         public Task<bool> VerifyCredentials(Credential credential);
 
