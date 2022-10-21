@@ -4,6 +4,7 @@ using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using System.Collections;
 using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
@@ -55,9 +56,14 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SignupCredentials>> FindAll()
+        public async Task<IEnumerable<SignupCredentials>> FindAll()
         {
-            throw new NotImplementedException();
+            using var client = new RestClient(ServerUrl.Url);
+            var request = new RestRequest("", Method.Get);
+            var response = await client.ExecuteAsync(request);
+            var deserializedReponse = JsonSerializer.Deserialize<IEnumerable<SignupCredentials>>(response.Content);
+            //if deserializedResponse is not null then is returned, if not an empty array returned
+            return deserializedReponse ?? (Array.Empty<SignupCredentials>());
         }
 
         public Task<IEnumerable<SignupCredentials>> FindAllById(IEnumerable<int> Ids)

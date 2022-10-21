@@ -26,7 +26,10 @@
                                     <a class="nav-link text-dark" asp-controller="Account" asp-action="Dashboard">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Setting">Settings</a>
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="ListOfUsers">Users</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Log in</a>
                                 </li>
                                 <form method="post" class="form-inline" asp-page="/Account/Logout">
                                     <button type="submit" class="m1-2 btn btn-link">Logout</button>

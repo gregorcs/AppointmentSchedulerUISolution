@@ -52,5 +52,11 @@ namespace AppointmentSchedulerUI.Controllers
         {
             return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
         } 
+
+        public async Task<IActionResult> ListOfUsers()
+        {
+            var result = await _accountRepository.FindAll();
+            return View(result);
+        }
     }
 }
