@@ -11,7 +11,7 @@ namespace AppointmentSchedulerUILibrary
     {
         [Required]
         [Display(Name = "Name")]
-        public string UserName { get; set; }
+        public string Username { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }

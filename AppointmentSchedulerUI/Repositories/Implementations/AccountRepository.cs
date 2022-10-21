@@ -59,7 +59,13 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             using var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("", Method.Get);
             var response = await client.ExecuteAsync(request);
-            var deserializedReponse = JsonSerializer.Deserialize<IEnumerable<SignupCredential>>(response.Content);
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var deserializedReponse = JsonSerializer.Deserialize<IEnumerable<SignupCredential>>(response.Content, options);
+
             //if deserializedResponse is not null then is returned, if not an empty array returned
             return deserializedReponse ?? (Array.Empty<SignupCredential>());
         }
