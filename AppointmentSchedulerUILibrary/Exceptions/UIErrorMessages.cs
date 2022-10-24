@@ -2,8 +2,10 @@
 {
     public class UIErrorMessages
     {
-        public const string LengthExceeded = "Allowed input length exceeded";
+        public const string LengthExceeded = "Invalid input length";
         public const string PasswordNotMatch = "Re-entered password does not match";
-        public const string InvalidEmail = "Entered email is not valid";
+        public const string InvalidEmail = "Invalid email";
+        public const string InvalidUsername = "No special characters allowed";
+        public const string InvalidPassword = "Must contain: at least 8 characters, 1 uppercase letter, 1 number";
     }
 }

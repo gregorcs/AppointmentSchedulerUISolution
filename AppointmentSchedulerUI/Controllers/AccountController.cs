@@ -3,7 +3,6 @@ using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -16,7 +15,7 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public IActionResult RegisterAccount()
         {
             return View();
         }
@@ -26,10 +25,22 @@ namespace AppointmentSchedulerUI.Controllers
             _accountRepository = accountRepository;
         }
 
-        public async Task<ViewResult> RegisterAccount(SignupCredential credentials)
+        public async Task<IActionResult> Create(SignupCredential credential)
         {
-            var result = await _accountRepository.Save(credentials);
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View("RegisterAccount", credential);
+            }
+            var result = await _accountRepository.Save(credential);
+            if (result.IsSuccessStatusCode)
+            {
+                return await Verify(credential);
+            } else
+            {
+                //TODO impleneting an error view
+                //return View("Error");
+            }
+            return View("RegisterAccount");
         }
 
         public IActionResult Login()

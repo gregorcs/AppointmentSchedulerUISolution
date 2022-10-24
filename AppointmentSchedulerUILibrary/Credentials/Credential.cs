@@ -14,6 +14,7 @@ namespace AppointmentSchedulerUILibrary
         [Required]
         [DataType(DataType.Password)]
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
+        [RegularExpression(PasswordRegex.Pattern, ErrorMessage = UIErrorMessages.InvalidPassword)]
         public string Password { get; set; }
     }
 }
