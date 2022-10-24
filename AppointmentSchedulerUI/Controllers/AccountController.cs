@@ -11,6 +11,11 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
+        public AccountController(IAccountRepository accountRepository)
+        {
+            _accountRepository = accountRepository;
+        }
+
         public IActionResult Dashboard()
         {
             return View();
@@ -19,11 +24,6 @@ namespace AppointmentSchedulerUI.Controllers
         public IActionResult RegisterAccount()
         {
             return View();
-        }
-
-        public AccountController(IAccountRepository accountRepository)
-        {
-            _accountRepository = accountRepository;
         }
 
         public async Task<IActionResult> Create(SignupCredential credential)
@@ -65,17 +65,16 @@ namespace AppointmentSchedulerUI.Controllers
                 return View("Login", credential);
             }
         }
+        public IActionResult LoggedIn()
+        {
+            return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
+        }
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("", "Home");
         }
-
-        public IActionResult LoggedIn()
-        {
-            return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
-        } 
 
         public async Task<IActionResult> ListOfUsers()
         {
