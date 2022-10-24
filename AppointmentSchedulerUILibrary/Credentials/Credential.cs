@@ -6,7 +6,7 @@ namespace AppointmentSchedulerUILibrary
 {
     public class Credential
     {
-        
+
         [Required]
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
         [RegularExpression(EmailRegex.Pattern, ErrorMessage = UIErrorMessages.InvalidEmail)]

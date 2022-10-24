@@ -1,4 +1,5 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.Exceptions;
+using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -37,10 +38,9 @@ namespace AppointmentSchedulerUI.Controllers
                 return await Verify(credential);
             } else
             {
-                //TODO impleneting an error view
-                //return View("Error");
+                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
+                return View("RegisterAccount", credential);
             }
-            return View("RegisterAccount");
         }
 
         public IActionResult Login()
@@ -50,13 +50,20 @@ namespace AppointmentSchedulerUI.Controllers
 
         public async Task<IActionResult> Verify(Credential credential)
         {
-            if (ModelState.IsValid && await _accountRepository.VerifyCredentials(credential))
+            if (!ModelState.IsValid)
+            {
+                return View("Login", credential);
+            }
+            if (await _accountRepository.VerifyCredentials(credential))
             {
                 var principal = CookieHandler.CreateCookie(credential.Email);
                 await HttpContext.SignInAsync(CookieHandler.CookieName, principal);
                 return RedirectToAction("LoggedIn");
+            } else
+            {
+                ModelState.AddModelError("password", UIErrorMessages.IncorrectCredentials);
+                return View("Login", credential);
             }
-            return View("Login", credential);
         }
 
         public async Task<IActionResult> Logout()
