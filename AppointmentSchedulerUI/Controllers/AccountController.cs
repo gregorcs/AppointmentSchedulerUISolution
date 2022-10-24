@@ -31,10 +31,16 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Login(Credential credential)
+        public IActionResult Login()
         {
-            if (await _accountRepository.VerifyCredentials(credential))
+            return View();
+        }
+
+        public async Task<IActionResult> Verify(Credential credential)
+        {
+            if (ModelState.IsValid && await _accountRepository.VerifyCredentials(credential))
             {
+                //move this into its own class
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, credential.Email),
@@ -45,7 +51,13 @@ namespace AppointmentSchedulerUI.Controllers
                 await HttpContext.SignInAsync("MyCookieAuth", principal);
                 return RedirectToAction("LoggedIn");
             }
-            return View();
+            return View("Login", credential);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("", "Home");
         }
 
         public IActionResult LoggedIn()

@@ -18,6 +18,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             request.AddHeader("Content-Type", "application/json");
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
+
             return await client.ExecuteAsync(request);
         }
 
@@ -30,6 +31,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             request.AddHeader("Content-Type", "application/json");
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
+
             RestResponse response = await client.ExecuteAsync(request);
             return response.IsSuccessStatusCode;
         }
@@ -54,12 +56,14 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
+        [HttpGet]
+        [ValidateAntiForgeryToken]
         public async Task<IEnumerable<SignupCredential>> FindAll()
         {
             using var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("", Method.Get);
             var response = await client.ExecuteAsync(request);
-
+            //deserialize
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
