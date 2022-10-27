@@ -6,11 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAccountRepository, AccountRepository>();
 builder.Services.AddAuthentication(CookieHandler.CookieName).AddCookie(CookieHandler.CookieName, options =>
 {
     options.Cookie.Name = CookieHandler.CookieName;
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UseAccess", policy => policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") || context.User.IsInRole("User")));
 });
 var app = builder.Build();
 // Configure the HTTP request pipeline.

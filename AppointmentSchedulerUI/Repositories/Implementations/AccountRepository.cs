@@ -24,16 +24,23 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<bool> VerifyCredentials(Credential credentials)
+        public async Task<string> Authenticate(Credential credentials)
         {
             using var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("authenticate", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
-            return response.IsSuccessStatusCode;
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessStatusCode && response.Content != null)
+            {
+                return JsonSerializer.Deserialize<string>(response.Content, options);
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public Task Delete(SignupCredential entity)
@@ -62,16 +69,18 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         {
             using var client = new RestClient(ServerUrl.Url);
             var request = new RestRequest("", Method.Get);
+            HttpContextAccessor httpContextAccessor = new();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
             var response = await client.ExecuteAsync(request);
-            //deserialize
-            var options = new JsonSerializerOptions
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            if (response.IsSuccessStatusCode && response.Content != null)
             {
-                PropertyNameCaseInsensitive = true
-            };
-            var deserializedReponse = JsonSerializer.Deserialize<IEnumerable<SignupCredential>>(response.Content, options);
+                return JsonSerializer.Deserialize<IEnumerable<SignupCredential>>(response.Content, options) ??
+                    Array.Empty<SignupCredential>();
+            }
 
-            //if deserializedResponse is not null then is returned, if not an empty array returned
-            return deserializedReponse ?? (Array.Empty<SignupCredential>());
+            return Array.Empty<SignupCredential>();
         }
 
         public Task<IEnumerable<SignupCredential>> FindAllById(IEnumerable<int> Ids)

@@ -35,8 +35,9 @@ namespace AppointmentSchedulerUI.Controllers
             var result = await _accountRepository.Save(credential);
             if (result.IsSuccessStatusCode)
             {
-                return await Verify(credential);
-            } else
+                return await Authenticate(credential);
+            }
+            else
             {
                 ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
                 return View("RegisterAccount", credential);
@@ -48,18 +49,20 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Verify(Credential credential)
+        public async Task<IActionResult> Authenticate(Credential credential)
         {
             if (!ModelState.IsValid)
             {
                 return View("Login", credential);
             }
-            if (await _accountRepository.VerifyCredentials(credential))
+            var response = await _accountRepository.Authenticate(credential);
+            if (response != null)
             {
-                var principal = CookieHandler.CreateCookie(credential.Email);
+                var principal = CookieHandler.CreateAdminCookie(credential.Email, response);
                 await HttpContext.SignInAsync(CookieHandler.CookieName, principal);
                 return RedirectToAction("LoggedIn");
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("password", UIErrorMessages.IncorrectCredentials);
                 return View("Login", credential);
