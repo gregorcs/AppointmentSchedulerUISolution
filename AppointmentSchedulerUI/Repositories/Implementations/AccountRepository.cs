@@ -1,8 +1,10 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary;
+using AppointmentSchedulerUILibrary.Credentials;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
@@ -13,9 +15,33 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         [ValidateAntiForgeryToken]
         public async Task<RestResponse> Save(SignupCredential credentials)
         {
-            using var client = new RestClient(ServerUrl.Url);
-            var request = new RestRequest("create-account", Method.Post);
+            using var client = new RestClient(ServerUrl.AccountUrl);
+            var request = new RestRequest("", Method.Post);
             request.AddHeader("Content-Type", "application/json");
+            var body = JsonSerializer.Serialize(credentials);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+            return await client.ExecuteAsync(request);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<RestResponse> SaveEmployee(EmployeeSignupCredential credentials)
+        {
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+            Claim claimFound = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Role");
+
+            if (!claimFound.Value.Equals("Admin"))
+            {
+                //todo add something sensible here, like some error view
+                return null;
+            }
+
+            using var client = new RestClient(ServerUrl.EmployoeeUrl);
+            var request = new RestRequest("", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
 
@@ -26,15 +52,15 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         [ValidateAntiForgeryToken]
         public async Task<string> Authenticate(Credential credentials)
         {
-            using var client = new RestClient(ServerUrl.Url);
+            using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("authenticate", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var response = await client.ExecuteAsync(request);
             if (response.IsSuccessStatusCode && response.Content != null)
             {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 return JsonSerializer.Deserialize<string>(response.Content, options);
             }
             else
@@ -67,19 +93,22 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         [ValidateAntiForgeryToken]
         public async Task<IEnumerable<SignupCredential>> FindAll()
         {
-            using var client = new RestClient(ServerUrl.Url);
+            using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("", Method.Get);
+            //move http access into its own repo
             HttpContextAccessor httpContextAccessor = new();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
             request.AddHeader("Authorization", claim.Value);
+
             var response = await client.ExecuteAsync(request);
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            //check on backend if array has any objs otherwise send notfound
             if (response.IsSuccessStatusCode && response.Content != null)
             {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 return JsonSerializer.Deserialize<IEnumerable<SignupCredential>>(response.Content, options) ??
                     Array.Empty<SignupCredential>();
             }
-
             return Array.Empty<SignupCredential>();
         }
 
@@ -88,8 +117,19 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<SignupCredential> FindById(int id)
+        public async Task<SignupCredential> FindById(int id)
         {
+            using var client = new RestClient(ServerUrl.AccountUrl + "/" + id);
+            var request = new RestRequest("", Method.Get);
+            //move http access into its own repo
+            HttpContextAccessor httpContextAccessor = new();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+
+            var response = await client.ExecuteAsync(request);
+
+            //todo finish
+
             throw new NotImplementedException();
         }
 

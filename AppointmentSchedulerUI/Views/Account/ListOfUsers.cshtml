@@ -7,7 +7,7 @@
 <h1>List of users</h1>
 
 <p>
-    <a asp-action="Create">Create admin account</a>
+    <a asp-action="RegisterEmployee">Create account</a>
 </p>
 <table class="table">
     <thead>
@@ -22,7 +22,6 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-    Console.WriteLine("Hello there: " + item.Email);
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Username)

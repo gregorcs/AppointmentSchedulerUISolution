@@ -2,6 +2,7 @@
 using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.Cookies;
+using AppointmentSchedulerUILibrary.Credentials;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,11 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
+        public IActionResult RegisterEmployee()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Create(SignupCredential credential)
         {
             if (!ModelState.IsValid)
@@ -41,6 +47,22 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
                 return View("RegisterAccount", credential);
+            }
+        }
+        public async Task<IActionResult> CreateEmployee(EmployeeSignupCredential credential)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RegisterEmployee", credential);
+            }
+            var result = await _accountRepository.SaveEmployee(credential);
+            if (result.IsSuccessStatusCode)
+            {
+                return View("RegisterEmployee", credential);
+            } else
+            {
+                ModelState.AddModelError("RoomNumber", UIErrorMessages.AccountCreationFailed);
+                return View("RegisterEmployee", credential);
             }
         }
 
@@ -79,10 +101,6 @@ namespace AppointmentSchedulerUI.Controllers
             return RedirectToAction("", "Home");
         }
 
-        public async Task<IActionResult> ListOfUsers()
-        {
-            var result = await _accountRepository.FindAll();
-            return View(result);
-        }
+        public async Task<IActionResult> ListOfUsers() => View(await _accountRepository.FindAll());
     }
 }

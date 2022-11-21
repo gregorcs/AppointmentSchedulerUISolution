@@ -1,10 +1,15 @@
 ﻿using AppointmentSchedulerUI.Exceptions;
 using AppointmentSchedulerUILibrary.UIRegex;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AppointmentSchedulerUILibrary
+namespace AppointmentSchedulerUILibrary.Credentials
 {
-    public class SignupCredential : Credential
+    public class EmployeeSignupCredential : Credential
     {
         [Required, Display(Name = "Name")]
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
@@ -16,6 +21,10 @@ namespace AppointmentSchedulerUILibrary
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
         [Compare("Password", ErrorMessage = UIErrorMessages.PasswordNotMatch)]
         public string ConfirmPassword { get; set; }
-        //todo add password + confirm password
+        [Required]
+        [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
+        public string Role { get; set; }
+        [Required]
+        public int RoomNumber { get; set; }
     }
 }
