@@ -32,13 +32,13 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create(SignupCredential credential)
+        public async Task<IActionResult> SaveUser(SignupCredential credential)
         {
             if (!ModelState.IsValid)
             {
                 return View("RegisterAccount", credential);
             }
-            var result = await _accountRepository.Save(credential);
+            var result = await _accountRepository.SaveUser(credential);
             if (result.IsSuccessStatusCode)
             {
                 return await Authenticate(credential);
@@ -49,19 +49,19 @@ namespace AppointmentSchedulerUI.Controllers
                 return View("RegisterAccount", credential);
             }
         }
-        public async Task<IActionResult> CreateEmployee(EmployeeSignupCredential credential)
+        public async Task<IActionResult> SaveEmployee(EmployeeSignupCredential credential)
         {
             if (!ModelState.IsValid)
             {
                 return View("RegisterEmployee", credential);
             }
             var result = await _accountRepository.SaveEmployee(credential);
-            if (result.IsSuccessStatusCode)
+            if (result != null && result.IsSuccessStatusCode)
             {
                 return View("RegisterEmployee", credential);
             } else
             {
-                ModelState.AddModelError("RoomNumber", UIErrorMessages.AccountCreationFailed);
+                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
                 return View("RegisterEmployee", credential);
             }
         }
@@ -77,11 +77,20 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("Login", credential);
             }
-            var response = await _accountRepository.Authenticate(credential);
+            AccountDetails response;
+            try
+            {
+                response = await _accountRepository.Authenticate(credential);
+            } catch (Exception ex)
+            {
+                //exception should be logged
+                ModelState.AddModelError("password", ex.Message);
+                return View("Login", credential);
+            }
             if (response != null)
             {
                 //this could be updated to not only hold either admin or user cookie
-                //it could be expanded with various roles with relative ease
+                //it could be expanded with various roles with relative ease (out of scope)
                 var principal = response.Role.Equals("Admin")
                     ? CookieHandler.CreateAdminCookie(credential.Email, response)
                     : CookieHandler.CreateUserCookie(credential.Email, response);

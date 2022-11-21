@@ -1,4 +1,5 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.Exceptions;
+using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.Credentials;
@@ -14,7 +15,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<RestResponse> Save(SignupCredential credentials)
+        public async Task<RestResponse> SaveUser(SignupCredential credentials)
         {
             using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("", Method.Post);
@@ -33,7 +34,6 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
             if (!httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
-                //todo add something sensible here, like some error view
                 return null;
             }
 
@@ -65,8 +65,8 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             }
             else
             {
-                //todo do something nicer
-                throw new Exception();
+                //this could have wrapper exception class in case we wanted some special logic in there
+                throw new Exception(UIErrorMessages.IncorrectCredentials);
             }
         }
 
