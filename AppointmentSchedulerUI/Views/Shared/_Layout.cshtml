@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,7 +20,8 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @{ 
-                        if (User.Identity.IsAuthenticated)
+                        //todo block customers from viewing list of users
+                        if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
@@ -27,6 +29,16 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Account" asp-action="ListOfUsers">Users</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+                                </li>
+                            </ul>
+                        } else if (User.Identity.IsAuthenticated)
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Dashboard">Home</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>

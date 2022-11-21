@@ -6,7 +6,7 @@ namespace AppointmentSchedulerUI.Repositories.Interfaces
 {
     public interface IAccountRepository : ICrudRepository<SignupCredential, int>
     {
-        public Task<string> Authenticate(Credential credential);
+        public Task<AccountDetails> Authenticate(LoginCredential credential);
         public Task<RestResponse> SaveEmployee(EmployeeSignupCredential credential);
     }
 }

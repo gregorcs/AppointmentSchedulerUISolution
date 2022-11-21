@@ -71,7 +71,7 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Authenticate(Credential credential)
+        public async Task<IActionResult> Authenticate(LoginCredential credential)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,11 @@ namespace AppointmentSchedulerUI.Controllers
             var response = await _accountRepository.Authenticate(credential);
             if (response != null)
             {
-                var principal = CookieHandler.CreateAdminCookie(credential.Email, response);
+                //this could be updated to not only hold either admin or user cookie
+                //it could be expanded with various roles with relative ease
+                var principal = response.Role.Equals("Admin")
+                    ? CookieHandler.CreateAdminCookie(credential.Email, response)
+                    : CookieHandler.CreateUserCookie(credential.Email, response);
                 await HttpContext.SignInAsync(CookieHandler.CookieName, principal);
                 return RedirectToAction("LoggedIn");
             }

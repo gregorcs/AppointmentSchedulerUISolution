@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentSchedulerUILibrary.Credentials
 {
-    public class EmployeeSignupCredential : Credential
+    public class EmployeeSignupCredential : LoginCredential
     {
         [Required, Display(Name = "Name")]
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]

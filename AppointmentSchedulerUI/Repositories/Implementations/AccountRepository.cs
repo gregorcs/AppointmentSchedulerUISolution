@@ -2,6 +2,7 @@
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.Credentials;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System.Security.Claims;
@@ -29,9 +30,8 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         public async Task<RestResponse> SaveEmployee(EmployeeSignupCredential credentials)
         {
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-            Claim claimFound = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Role");
 
-            if (!claimFound.Value.Equals("Admin"))
+            if (!httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
                 //todo add something sensible here, like some error view
                 return null;
@@ -50,7 +50,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<string> Authenticate(Credential credentials)
+        public async Task<AccountDetails> Authenticate(LoginCredential credentials)
         {
             using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("authenticate", Method.Post);
@@ -61,10 +61,11 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             if (response.IsSuccessStatusCode && response.Content != null)
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                return JsonSerializer.Deserialize<string>(response.Content, options);
+                return JsonSerializer.Deserialize<AccountDetails>(response.Content, options);
             }
             else
             {
+                //todo do something nicer
                 throw new Exception();
             }
         }
@@ -95,7 +96,6 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         {
             using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("", Method.Get);
-            //move http access into its own repo
             HttpContextAccessor httpContextAccessor = new();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
             request.AddHeader("Authorization", claim.Value);

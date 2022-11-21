@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppointmentSchedulerUILibrary
 {
-    public class Credential
+    public class LoginCredential
     {
 
         [Required]

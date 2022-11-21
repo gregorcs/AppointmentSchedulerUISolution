@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppointmentSchedulerUILibrary
 {
-    public class SignupCredential : Credential
+    public class SignupCredential : LoginCredential
     {
         [Required, Display(Name = "Name")]
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
