@@ -105,7 +105,7 @@ namespace AppointmentSchedulerUI.Controllers
         }
         public IActionResult LoggedIn()
         {
-            return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
+            return User.Identity.IsAuthenticated ? View("Dashboard") : RedirectToAction("Login");
         }
 
         public async Task<IActionResult> Logout()

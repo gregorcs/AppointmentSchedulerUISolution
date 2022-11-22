@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AppointmentSchedulerUILibrary.SignupCredential>
 
 @{
-    ViewData["Title"] = "ListOfUsers";
+    ViewData["Title"] = "List of users";
 }
 
 <h1>List of users</h1>
@@ -31,9 +31,9 @@
             </td>
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { email = item.Email }) |
+                @Html.ActionLink("Details", "Details", new { email = item.Email }) |
+                @Html.ActionLink("Delete", "DeleteByEmail", new { email = item.Email })
             </td>
         </tr>
 }

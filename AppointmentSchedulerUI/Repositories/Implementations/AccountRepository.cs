@@ -121,7 +121,6 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         {
             using var client = new RestClient(ServerUrl.AccountUrl + "/" + id);
             var request = new RestRequest("", Method.Get);
-            //move http access into its own repo
             HttpContextAccessor httpContextAccessor = new();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
             request.AddHeader("Authorization", claim.Value);
