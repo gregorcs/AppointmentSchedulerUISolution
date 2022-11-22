@@ -1,8 +1,10 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.Exceptions;
+using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary;
+using AppointmentSchedulerUILibrary.Cookies;
+using AppointmentSchedulerUILibrary.Credentials;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -10,53 +12,108 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
         }
 
-        public async Task<ViewResult> RegisterAccount(SignupCredential credentials)
+        public IActionResult Dashboard()
         {
-            var result = await _accountRepository.Save(credentials);
             return View();
         }
 
-        public async Task<IActionResult> Login(Credential credential)
+        public IActionResult RegisterAccount()
         {
-            if (await _accountRepository.VerifyCredentials(credential))
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, credential.Email),
-                };
-                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
-                ClaimsPrincipal principal = new(identity);
+            return View();
+        }
 
-                await HttpContext.SignInAsync("MyCookieAuth", principal);
+        public IActionResult RegisterEmployee()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SaveUser(SignupCredential credential)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RegisterAccount", credential);
+            }
+            var result = await _accountRepository.SaveUser(credential);
+            if (result.IsSuccessStatusCode)
+            {
+                return await Authenticate(credential);
+            }
+            else
+            {
+                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
+                return View("RegisterAccount", credential);
+            }
+        }
+        public async Task<IActionResult> SaveEmployee(EmployeeSignupCredential credential)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RegisterEmployee", credential);
+            }
+            var result = await _accountRepository.SaveEmployee(credential);
+            if (result != null && result.IsSuccessStatusCode)
+            {
+                return View("RegisterEmployee", credential);
+            } else
+            {
+                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
+                return View("RegisterEmployee", credential);
+            }
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Authenticate(LoginCredential credential)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", credential);
+            }
+            AccountDetails response;
+            try
+            {
+                response = await _accountRepository.Authenticate(credential);
+            } catch (Exception ex)
+            {
+                //exception should be logged
+                ModelState.AddModelError("password", ex.Message);
+                return View("Login", credential);
+            }
+            if (response != null)
+            {
+                //this could be updated to not only hold either admin or user cookie
+                //it could be expanded with various roles with relative ease (out of scope)
+                var principal = response.Role.Equals("Admin")
+                    ? CookieHandler.CreateAdminCookie(credential.Email, response)
+                    : CookieHandler.CreateUserCookie(credential.Email, response);
+                await HttpContext.SignInAsync(CookieHandler.CookieName, principal);
                 return RedirectToAction("LoggedIn");
             }
-            return View();
+            else
+            {
+                ModelState.AddModelError("password", UIErrorMessages.IncorrectCredentials);
+                return View("Login", credential);
+            }
         }
-
         public IActionResult LoggedIn()
         {
-            return User.Identity.IsAuthenticated ? View() : RedirectToAction("Login");
-        } 
-
-        public async Task<IActionResult> ListOfUsers()
-        {
-            var result = await _accountRepository.FindAll();
-            return View(result);
+            return User.Identity.IsAuthenticated ? View("Dashboard") : RedirectToAction("Login");
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("", "Home");
+        }
+
+        public async Task<IActionResult> ListOfUsers() => View(await _accountRepository.FindAll());
     }
 }
