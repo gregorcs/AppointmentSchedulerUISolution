@@ -17,8 +17,25 @@
         <form asp-action="">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label for="datetime">Day:</label>
-                <input name="datetime" type="datetime-local">
+                <label for="datetime">Day: @DateTime.Now.Date.ToString("yyyy-MM-dd")</label>
+                <input name="datetime" type="date" 
+                min="@DateTime.Now.Date.ToString("yyyy-MM-dd")"
+                max="@DateTime.Now.Date.AddYears(1).ToString("yyyy-MM-dd")">
+            </div>
+            <div class="form-group">
+                <label for="datetime">Available time slots:</label>
+                <select name="time-slot" id="time-slot">
+                    @{
+                        ArrayList timeSlots = new ArrayList();
+                        timeSlots.Add("11:30");
+                        timeSlots.Add("12:00");
+                        timeSlots.Add("12:30");
+                        foreach (string timeSlot in timeSlots)
+                        {
+                            <option value="timeSlot">@timeSlot</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label for="employees">Employee:</label>
@@ -36,8 +53,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="jobtypes">Job type:</label>
-                <select name="jobtypes" id="jobtypes">
+                <label for="job-types">Job type:</label>
+                <select name="job-types" id="job-types">
                     @{
                         ArrayList jobTypes = new ArrayList();
                         jobTypes.Add("Massage");
@@ -48,6 +65,10 @@
                         }
                     }
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="details">Message</label>
+                <textarea></textarea>
             </div>
             <input type="submit" value="Book appointment" class="btn btn-primary">
         </form>
