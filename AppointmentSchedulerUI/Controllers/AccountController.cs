@@ -10,16 +10,11 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountDAO _accountDAO;
 
-        public AccountController(IAccountRepository accountRepository)
+        public AccountController(IAccountDAO accountDAO)
         {
-            _accountRepository = accountRepository;
-        }
-
-        public IActionResult Dashboard()
-        {
-            return View();
+            _accountDAO = accountDAO;
         }
 
         public IActionResult RegisterAccount()
@@ -38,7 +33,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterAccount", credential);
             }
-            var result = await _accountRepository.SaveUser(credential);
+            var result = await _accountDAO.Save(credential);
             if (result.IsSuccessStatusCode)
             {
                 return await Authenticate(credential);
@@ -55,7 +50,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterEmployee", credential);
             }
-            var result = await _accountRepository.SaveEmployee(credential);
+            var result = await _accountDAO.SaveEmployee(credential);
             if (result != null && result.IsSuccessStatusCode)
             {
                 return View("RegisterEmployee", credential);
@@ -80,7 +75,7 @@ namespace AppointmentSchedulerUI.Controllers
             AccountDetails response;
             try
             {
-                response = await _accountRepository.Authenticate(credential);
+                response = await _accountDAO.Authenticate(credential);
             } catch (Exception ex)
             {
                 //exception should be logged
@@ -105,7 +100,7 @@ namespace AppointmentSchedulerUI.Controllers
         }
         public IActionResult LoggedIn()
         {
-            return User.Identity.IsAuthenticated ? View("Dashboard") : RedirectToAction("Login");
+            return User.Identity.IsAuthenticated ? RedirectToAction("Dashboard", "Appointment") : RedirectToAction("Login");
         }
 
         public async Task<IActionResult> Logout()
@@ -114,6 +109,6 @@ namespace AppointmentSchedulerUI.Controllers
             return RedirectToAction("", "Home");
         }
 
-        public async Task<IActionResult> ListOfUsers() => View(await _accountRepository.FindAll());
+        public async Task<IActionResult> ListOfUsers() => View(await _accountDAO.FindAll());
     }
 }

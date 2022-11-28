@@ -11,11 +11,11 @@ using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountDAO : IAccountDAO
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<RestResponse> SaveUser(SignupCredential credentials)
+        public async Task<RestResponse> Save(SignupCredential credentials)
         {
             using var client = new RestClient(ServerUrl.AccountUrl);
             var request = new RestRequest("", Method.Post);

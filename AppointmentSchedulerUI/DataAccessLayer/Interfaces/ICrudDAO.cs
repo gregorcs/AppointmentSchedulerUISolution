@@ -2,9 +2,9 @@
 
 namespace AppointmentSchedulerUI.Repositories.Interfaces
 {
-    public interface ICrudRepository<T, ID>
+    public interface ICrudDAO<T, ID>
     {
-        public Task<RestResponse> SaveUser(T entity);
+        public Task<RestResponse> Save(T entity);
         public Task<int> SaveAll(IEnumerable<T> entities);
         public Task<T> FindById(ID id);
         public Task<bool> ExistsById(ID id);
