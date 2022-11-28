@@ -16,8 +16,4 @@
     <ProjectReference Include="..\AppointmentSchedulerUILibrary\AppointmentSchedulerUILibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Appointment\" />
-  </ItemGroup>
-
 </Project>
