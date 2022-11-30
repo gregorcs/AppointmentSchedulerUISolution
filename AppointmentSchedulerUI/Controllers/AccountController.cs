@@ -10,9 +10,9 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountDAO _accountDAO;
+        private readonly IAccountService _accountDAO;
 
-        public AccountController(IAccountDAO accountDAO)
+        public AccountController(IAccountService accountDAO)
         {
             _accountDAO = accountDAO;
         }

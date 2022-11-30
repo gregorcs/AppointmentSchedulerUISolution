@@ -4,7 +4,7 @@ using RestSharp;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
-    public class AppointmentDAO : IAppointmentDAO
+    public class AppointmentService : IAppointmentService
     {
         public Task Delete(AppointmentDTO entity)
         {

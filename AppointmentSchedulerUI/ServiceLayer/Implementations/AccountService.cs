@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
-    public class AccountDAO : IAccountDAO
+    public class AccountService : IAccountService
     {
         [HttpPost]
         [ValidateAntiForgeryToken]

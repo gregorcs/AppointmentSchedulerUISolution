@@ -6,8 +6,8 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AppointmentController : Controller
     {
-        private readonly IAppointmentDAO _appointmentDAO;
-        public AppointmentController(IAppointmentDAO appointmentDAO)
+        private readonly IAppointmentService _appointmentDAO;
+        public AppointmentController(IAppointmentService appointmentDAO)
         {
             this._appointmentDAO = appointmentDAO;
         }
