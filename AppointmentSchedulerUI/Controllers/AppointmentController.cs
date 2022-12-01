@@ -6,10 +6,10 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AppointmentController : Controller
     {
-        private readonly IAppointmentDAO _appointmentDAO;
-        public AppointmentController(IAppointmentDAO appointmentDAO)
+        private readonly IAppointmentService _appointmentService;
+        public AppointmentController(IAppointmentService appointmentService)
         {
-            this._appointmentDAO = appointmentDAO;
+            this._appointmentService = appointmentService;
         }
 
         /*
@@ -45,8 +45,8 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterAccount", appointment);
             }
-            var result = await _appointmentDAO.Save(appointment);
-            if (result.IsSuccessStatusCode)
+            var result = await _appointmentService.Save(appointment);
+            if (result != null && result.IsSuccessStatusCode)
             {
                 return View();
             }
