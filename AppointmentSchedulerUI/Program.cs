@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSingleton<IAccountDAO, AccountDAO>();
-builder.Services.AddSingleton<IAppointmentDAO, AppointmentDAO>();
+builder.Services.AddSingleton<IAccountService, AccountService>();
+builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
 builder.Services.AddAuthentication(CookieHandler.CookieName).AddCookie(CookieHandler.CookieName, options =>
 {
     options.Cookie.Name = CookieHandler.CookieName;

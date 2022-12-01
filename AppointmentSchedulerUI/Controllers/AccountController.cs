@@ -10,11 +10,11 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountDAO _accountDAO;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountDAO accountDAO)
+        public AccountController(IAccountService accountService)
         {
-            _accountDAO = accountDAO;
+            _accountService = accountService;
         }
 
         public IActionResult RegisterAccount()
@@ -33,7 +33,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterAccount", credential);
             }
-            var result = await _accountDAO.Save(credential);
+            var result = await _accountService.Save(credential);
             if (result.IsSuccessStatusCode)
             {
                 return await Authenticate(credential);
@@ -50,7 +50,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterEmployee", credential);
             }
-            var result = await _accountDAO.SaveEmployee(credential);
+            var result = await _accountService.SaveEmployee(credential);
             if (result != null && result.IsSuccessStatusCode)
             {
                 return View("RegisterEmployee", credential);
@@ -75,7 +75,7 @@ namespace AppointmentSchedulerUI.Controllers
             AccountDetails response;
             try
             {
-                response = await _accountDAO.Authenticate(credential);
+                response = await _accountService.Authenticate(credential);
             } catch (Exception ex)
             {
                 //exception should be logged
@@ -109,6 +109,6 @@ namespace AppointmentSchedulerUI.Controllers
             return RedirectToAction("", "Home");
         }
 
-        public async Task<IActionResult> ListOfUsers() => View(await _accountDAO.FindAll());
+        public async Task<IActionResult> ListOfUsers() => View(await _accountService.FindAll());
     }
 }

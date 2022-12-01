@@ -1,10 +1,12 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using RestSharp;
+using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
-    public class AppointmentDAO : IAppointmentDAO
+    public class AppointmentService : IAppointmentService
     {
         public Task Delete(AppointmentDTO entity)
         {
@@ -46,9 +48,25 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<RestResponse> Save(AppointmentDTO entity)
+        public async Task<RestResponse> Save(AppointmentDTO entity)
         {
-            throw new NotImplementedException();
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+
+            if (!httpContextAccessor.HttpContext.User.IsInRole("Admin") 
+                || !httpContextAccessor.HttpContext.User.IsInRole("User"))
+            {
+                return null;
+            }
+
+            using var client = new RestClient(ServerUrl.EmployoeeUrl);
+            var request = new RestRequest("", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+            var body = JsonSerializer.Serialize(entity);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+            return await client.ExecuteAsync(request);
         }
     }
 }
