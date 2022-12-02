@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentSchedulerUILibrary.AppointmentDTOs
 {
-    public class AppointmentDTO
+    public class DeleteAppointmentDTO
     {
         [Required, Display(Name = "Time")]
         public DateTime Time { get; set; }
@@ -26,5 +26,8 @@ namespace AppointmentSchedulerUILibrary.AppointmentDTOs
 
         // [Required, Display(Name = "Appointment Status")]
         // public Boolean IsAccepted { get; set; }
+        public long AppointmentId { get; set; }
+        public long CustomerId { get; set; }
+        public IEnumerable<long> EmployeeIds { get; set; }
     }
 }

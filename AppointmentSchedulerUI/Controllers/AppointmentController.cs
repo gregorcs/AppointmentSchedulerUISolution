@@ -1,6 +1,8 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -12,19 +14,28 @@ namespace AppointmentSchedulerUI.Controllers
             this._appointmentService = appointmentService;
         }
 
-        /*
-         * 
-         * Views
-         * 
-         */
-
         public IActionResult Index()
         {
-            return View();
+            //rest client asks for data - sends it to the view
+            //list current appointments
+            HttpContextAccessor httpAccessor = new HttpContextAccessor();
+            string stringId = httpAccessor.HttpContext.User.Claims.First(claim => claim.Type == "Id").ToString();
+            long Id = long.Parse(stringId);
+            return View("Index", _appointmentService.GetAppointmentsByAccountId(Id));
+        }
+
+        public IActionResult DetailsEmployee(long id)
+        {
+            return View("DetailsEmployee", _appointmentService.FindById(id));
+        }
+        public IActionResult DetailsCustomer(long id)
+        {
+            return View("DetailsCustomer", _appointmentService.FindById(id));
         }
 
         public IActionResult Dashboard()
         {
+            //ViewBag.Employees = GetAllEmployeesAndAvailableTimeSlots(new DateTime(2022, 12, 01));
             return View();
         }
 
@@ -34,12 +45,12 @@ namespace AppointmentSchedulerUI.Controllers
         }
 
         /*
-         * 
+         *
          * CRUD
-         * 
+         *
          */
 
-        public async Task<IActionResult> SaveAppointment(AppointmentDTO appointment)
+        public async Task<IActionResult> SaveAppointment(CreateAppointmentDTO appointment)
         {
             if (!ModelState.IsValid)
             {
@@ -53,9 +64,16 @@ namespace AppointmentSchedulerUI.Controllers
             else
             {
 /*                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
-*/                return View("Dashboard", appointment);
+*/                //return View("Dashboard", appointment);
+                return View();
             }
         }
 
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
+        {
+
+            var result = await _appointmentService.GetAllEmployeesAndAvailableTimeSlots(date);
+            throw new NotImplementedException();
+        }
     }
 }
