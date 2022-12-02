@@ -12,6 +12,12 @@ namespace AppointmentSchedulerUI.Controllers
             this._appointmentDAO = appointmentDAO;
         }
 
+        /*
+         * 
+         * Views
+         * 
+         */
+
         public IActionResult Index()
         {
             return View();
@@ -21,6 +27,17 @@ namespace AppointmentSchedulerUI.Controllers
         {
             return View();
         }
+
+        public IActionResult AppointmentOverview()
+        {
+            return View();
+        }
+
+        /*
+         * 
+         * CRUD
+         * 
+         */
 
         public async Task<IActionResult> SaveAppointment(AppointmentDTO appointment)
         {

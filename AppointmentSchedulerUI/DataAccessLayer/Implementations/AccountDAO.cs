@@ -37,7 +37,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
                 return null;
             }
 
-            using var client = new RestClient(ServerUrl.EmployoeeUrl);
+            using var client = new RestClient(ServerUrl.EmployeeUrl);
             var request = new RestRequest("", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");

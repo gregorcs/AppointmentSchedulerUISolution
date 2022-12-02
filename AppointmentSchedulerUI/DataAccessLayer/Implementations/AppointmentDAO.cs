@@ -1,6 +1,10 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUI.Views;
+using AppointmentSchedulerUILibrary;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
+using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using System.Text.Json;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
@@ -26,13 +30,36 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AppointmentDTO>> FindAll()
+        public async Task<IEnumerable<AppointmentDTO>> FindAll()
         {
-            throw new NotImplementedException();
+            using var client = new RestClient(ServerUrl.AppointmentUrl);
+            var request = new RestRequest("", Method.Get);
+            HttpContextAccessor httpContextAccessor = new();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+
+            var response = await client.ExecuteAsync(request);
+
+            if (response.IsSuccessStatusCode && response.Content != null)
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                return JsonSerializer.Deserialize<IEnumerable<AppointmentDTO>>(response.Content, options) ??
+                    Array.Empty<AppointmentDTO>();
+            }
+            return Array.Empty<AppointmentDTO>();
+            //throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AppointmentDTO>> FindAllById(IEnumerable<long> Ids)
+        [HttpGet]
+        public async Task<IEnumerable<AppointmentDTO>> FindAllById(IEnumerable<long> id)
         {
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/" + id);
+            var request = new RestRequest("", Method.Get);
+            HttpContextAccessor httpContextAccessor = new();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+
+            var response = await client.ExecuteAsync(request);
             throw new NotImplementedException();
         }
 
