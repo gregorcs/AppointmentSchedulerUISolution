@@ -2,7 +2,7 @@
 
 namespace AppointmentSchedulerUI.Repositories.Interfaces
 {
-    public interface IAppointmentService : ICrudService<AppointmentDTO, long>
+    public interface IAppointmentService : ICrudService<CreateAppointmentDTO, GetAppointmentDTO, DeleteAppointmentDTO, long>
     {
     }
 }

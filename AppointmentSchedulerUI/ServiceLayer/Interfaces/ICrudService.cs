@@ -2,16 +2,16 @@
 
 namespace AppointmentSchedulerUI.Repositories.Interfaces
 {
-    public interface ICrudService<T, ID>
+    public interface ICrudService<CREATE, READ, DELETE, ID>
     {
-        public Task<RestResponse> Save(T entity);
-        public Task<int> SaveAll(IEnumerable<T> entities);
-        public Task<T> FindById(ID id);
+        public Task<RestResponse> Save(CREATE entity);
+        public Task<int> SaveAll(IEnumerable<CREATE> entities);
+        public Task<READ> FindById(ID id);
         public Task<bool> ExistsById(ID id);
-        public Task<IEnumerable<T>> FindAll();
-        public Task<IEnumerable<T>> FindAllById(IEnumerable<ID> Ids);
+        public Task<IEnumerable<READ>> FindAll();
+        public Task<IEnumerable<READ>> FindAllById(IEnumerable<ID> Ids);
         public Task DeleteById(ID id);
-        public Task Delete(T entity);
-        public Task DeleteAll(IEnumerable<T> entities);
+        public Task Delete(DELETE entity);
+        public Task DeleteAll(IEnumerable<DELETE> entities);
     }
 }
