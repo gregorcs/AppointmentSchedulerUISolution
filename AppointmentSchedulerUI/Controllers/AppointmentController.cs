@@ -39,6 +39,5 @@ namespace AppointmentSchedulerUI.Controllers
 */                return View("Dashboard", appointment);
             }
         }
-
     }
 }

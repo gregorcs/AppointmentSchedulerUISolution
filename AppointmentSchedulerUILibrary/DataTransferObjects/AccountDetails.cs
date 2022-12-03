@@ -13,5 +13,7 @@ namespace AppointmentSchedulerUILibrary.Credentials
         public string JwtToken { get; set; }
         [Required]
         public string Role { get; set; }
+        [Required]
+        public long Id { get; set; }
     }
 }
