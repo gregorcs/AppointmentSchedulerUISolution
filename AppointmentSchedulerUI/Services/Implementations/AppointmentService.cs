@@ -88,7 +88,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             request.AddHeader("Authorization", claim.Value);
             var body = JsonSerializer.Serialize(date);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
-
+            //todo, throws not found
             var response= await client.ExecuteAsync(request);
             Console.WriteLine(response);
             throw new NotImplementedException();
