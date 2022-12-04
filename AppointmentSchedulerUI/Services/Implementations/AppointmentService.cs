@@ -1,6 +1,8 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
+using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System.Text.Json;
 
@@ -67,6 +69,29 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             request.AddParameter("application/json", body, ParameterType.RequestBody);
 
             return await client.ExecuteAsync(request);
+        }
+
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
+        {
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+
+            /*            if (!httpContextAccessor.HttpContext.User.IsInRole("Admin")
+                            || !httpContextAccessor.HttpContext.User.IsInRole("User"))
+                        {
+                            return null;
+                        }*/
+            string UrlWithDate = "https://localhost:7052/api/Appointment?dateOfAppointment=2022-12-01";
+            using var client = new RestClient(UrlWithDate);
+            var request = new RestRequest("GetAllEmployeesAndAvailableTimeSlots", Method.Get);
+            request.AddHeader("Content-Type", "application/json");
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+            var body = JsonSerializer.Serialize(date);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+            var response= await client.ExecuteAsync(request);
+            Console.WriteLine(response);
+            throw new NotImplementedException();
         }
     }
 }

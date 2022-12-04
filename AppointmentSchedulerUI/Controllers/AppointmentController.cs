@@ -1,5 +1,6 @@
 ﻿using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentSchedulerUI.Controllers
@@ -19,6 +20,7 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Dashboard()
         {
+            ViewBag.Employees = GetAllEmployeesAndAvailableTimeSlots(new DateTime(2022, 12, 01));
             return View();
         }
 
@@ -38,6 +40,13 @@ namespace AppointmentSchedulerUI.Controllers
 /*                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
 */                return View("Dashboard", appointment);
             }
+        }
+
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
+        {
+
+            var result = await _appointmentService.GetAllEmployeesAndAvailableTimeSlots(date);
+            throw new NotImplementedException();
         }
     }
 }
