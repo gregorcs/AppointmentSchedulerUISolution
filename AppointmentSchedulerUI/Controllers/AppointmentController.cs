@@ -16,12 +16,7 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Index()
         {
-            //rest client asks for data - sends it to the view
-            //list current appointments
-            HttpContextAccessor httpAccessor = new HttpContextAccessor();
-            string stringId = httpAccessor.HttpContext.User.Claims.First(claim => claim.Type == "Id").ToString();
-            long Id = long.Parse(stringId);
-            return View("Index", _appointmentService.GetAppointmentsByAccountId(Id));
+            return View();
         }
 
         public IActionResult DetailsEmployee(long id)
@@ -35,7 +30,6 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Dashboard()
         {
-            //ViewBag.Employees = GetAllEmployeesAndAvailableTimeSlots(new DateTime(2022, 12, 01));
             return View();
         }
 
@@ -56,13 +50,6 @@ namespace AppointmentSchedulerUI.Controllers
 */                //return View("Dashboard", appointment);
                 return View();
             }
-        }
-
-        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
-        {
-
-            var result = await _appointmentService.GetAllEmployeesAndAvailableTimeSlots(date);
-            throw new NotImplementedException();
         }
     }
 }
