@@ -35,7 +35,7 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Dashboard()
         {
-            ViewBag.Employees = GetAllEmployeesAndAvailableTimeSlots(new DateTime(2022, 12, 01));
+            //ViewBag.Employees = GetAllEmployeesAndAvailableTimeSlots(new DateTime(2022, 12, 01));
             return View();
         }
 
@@ -53,7 +53,8 @@ namespace AppointmentSchedulerUI.Controllers
             else
             {
 /*                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
-*/                return View("Dashboard", appointment);
+*/                //return View("Dashboard", appointment);
+                return View();
             }
         }
 

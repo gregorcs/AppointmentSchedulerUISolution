@@ -127,7 +127,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
                 role = "employee";
             }
 
-            using var client = new RestClient(ServerUrl.AccountUrl + $"/{role}/{id}");
+            using var client = new RestClient(ServerUrl.AppointmentUrl + $"/{role}/{id}");
             var request = new RestRequest("", Method.Get);
 
             var response = await client.ExecuteAsync(request);
