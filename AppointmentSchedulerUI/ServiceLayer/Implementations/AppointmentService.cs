@@ -3,19 +3,33 @@ using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using AppointmentSchedulerUI.Exceptions;
+using Newtonsoft.Json;
 using RestSharp;
+using System.Linq;
+using System.Net;
 using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Net.NetworkInformation;
+
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
     public class AppointmentService : IAppointmentService
     {
-        public Task Delete(AppointmentDTO entity)
+        public Task Delete(DeleteAppointmentDTO entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAll(IEnumerable<AppointmentDTO> entities)
+        public Task DeleteAll(IEnumerable<DeleteAppointmentDTO> entities)
         {
             throw new NotImplementedException();
         }
@@ -30,27 +44,34 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AppointmentDTO>> FindAll()
+        public Task<IEnumerable<GetAppointmentDTO>> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AppointmentDTO>> FindAllById(IEnumerable<long> Ids)
+        public Task<IEnumerable<GetAppointmentDTO>> FindAllById(IEnumerable<long> Ids)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AppointmentDTO> FindById(long id)
+        public async Task<GetAppointmentDTO> FindById(long id)
+        {
+            using var client = new RestClient(ServerUrl.AccountUrl + "/customer/" + id);
+            var request = new RestRequest("", Method.Get);
+
+            var response = await client.ExecuteAsync(request);
+
+            var deserializedObject = JsonConvert.DeserializeObject<GetAppointmentDTO>(response.Content);
+
+            return deserializedObject;
+        }
+
+        public Task<int> SaveAll(IEnumerable<CreateAppointmentDTO> entities)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> SaveAll(IEnumerable<AppointmentDTO> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<RestResponse> Save(AppointmentDTO entity)
+        public async Task<RestResponse> Save(CreateAppointmentDTO entity)
         {
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
 

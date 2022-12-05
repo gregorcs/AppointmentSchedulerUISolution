@@ -15,6 +15,8 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Index()
         {
+            //rest client asks for data - sends it to the view
+            //list current appointments
             return View();
         }
 
