@@ -28,12 +28,8 @@ namespace AppointmentSchedulerUI.Controllers
             return View("DetailsCustomer", _appointmentService.FindById(id));
         }
 
-        public IActionResult Dashboard()
+        public IActionResult Dashboard(DateTime? date)
         {
-/*            GetAppointmentDTO getAppointmentDTO = new();
-            EmployeeDTO employeeDTO = new();
-            getAppointmentDTO.EmployeeNameList = new List<string>() { "Greg", "John" };
-            employeeDTO.Appointments = new List<int>() { 11, 12 };*/
             ViewData["EmployeeNameList"] = new List<string>() { "Greg", "John" };
             ViewData["TimeslotList"] = new List<int>() { 11, 12 };
             ViewData["JobTypeList"] = new List<string>() { "Massage" };
