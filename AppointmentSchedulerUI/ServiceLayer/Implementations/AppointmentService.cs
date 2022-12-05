@@ -56,14 +56,15 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
         public async Task<GetAppointmentDTO> FindById(long id)
         {
-            using var client = new RestClient(ServerUrl.AccountUrl + "/customer/" + id);
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/" + id);
             var request = new RestRequest("", Method.Get);
+            HttpContextAccessor httpContextAccessor = new();
 
             var response = await client.ExecuteAsync(request);
 
-            var deserializedObject = JsonConvert.DeserializeObject<GetAppointmentDTO>(response.Content);
+            var appointment = JsonConvert.DeserializeObject<GetAppointmentDTO>(response.Content);
 
-            return deserializedObject;
+            return appointment;
         }
 
         public Task<int> SaveAll(IEnumerable<CreateAppointmentDTO> entities)
@@ -113,6 +114,27 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             var response= await client.ExecuteAsync(request);
             Console.WriteLine(response);
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<GetAppointmentDTO>> GetAppointmentsByAccountId(long id)
+        {
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+            string role = "customer";
+
+            //IF ITS EMPLOYEE ACCOUNT THEN YOU WILL GET IT BY EMPLOYEEID
+            if (httpContextAccessor.HttpContext.User.IsInRole("Employee") || httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                role = "employee";
+            }
+
+            using var client = new RestClient(ServerUrl.AccountUrl + $"/{role}/{id}");
+            var request = new RestRequest("", Method.Get);
+
+            var response = await client.ExecuteAsync(request);
+
+            var appointmentList = JsonConvert.DeserializeObject<IEnumerable<GetAppointmentDTO>>(response.Content);
+
+            return appointmentList;
         }
     }
 }

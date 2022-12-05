@@ -2,6 +2,7 @@
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -13,11 +14,23 @@ namespace AppointmentSchedulerUI.Controllers
             this._appointmentService = appointmentService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(long id)
         {
             //rest client asks for data - sends it to the view
             //list current appointments
-            return View();
+            HttpContextAccessor httpAccessor = new HttpContextAccessor();
+            string stringId = httpAccessor.HttpContext.User.Claims.First(claim => claim.Equals("Id")).ToString();
+            long Id = long.Parse(stringId);
+            return View("Index", _appointmentService.GetAppointmentsByAccountId(Id));
+        }
+
+        public IActionResult DetailsEmployee(long id)
+        {
+            return View("DetailsEmployee", _appointmentService.FindById(id));
+        }
+        public IActionResult DetailsCustomer(long id)
+        {
+            return View("DetailsCustomer", _appointmentService.FindById(id));
         }
 
         public IActionResult Dashboard()
@@ -26,7 +39,7 @@ namespace AppointmentSchedulerUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SaveAppointment(AppointmentDTO appointment)
+        public async Task<IActionResult> SaveAppointment(CreateAppointmentDTO appointment)
         {
             if (!ModelState.IsValid)
             {
