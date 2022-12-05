@@ -14,12 +14,12 @@ namespace AppointmentSchedulerUI.Controllers
             this._appointmentService = appointmentService;
         }
 
-        public IActionResult Index(long id)
+        public IActionResult Index()
         {
             //rest client asks for data - sends it to the view
             //list current appointments
             HttpContextAccessor httpAccessor = new HttpContextAccessor();
-            string stringId = httpAccessor.HttpContext.User.Claims.First(claim => claim.Equals("Id")).ToString();
+            string stringId = httpAccessor.HttpContext.User.Claims.First(claim => claim.Type == "Id").ToString();
             long Id = long.Parse(stringId);
             return View("Index", _appointmentService.GetAppointmentsByAccountId(Id));
         }
