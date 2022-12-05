@@ -18,5 +18,7 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
             Role = role;
             RoomNumber = roomNumber;
         }
+
+        public EmployeeDTO() {}
     }
 }

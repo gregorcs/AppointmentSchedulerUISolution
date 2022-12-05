@@ -17,7 +17,8 @@ namespace AppointmentSchedulerUILibrary.AppointmentDTOs
         public string Email { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ArrayList EmployeeNameList { get; set; }
+        public IEnumerable EmployeeNameList { get; set; }
+        public string JobType { get; set; }
 
         public GetAppointmentDTO()
         {

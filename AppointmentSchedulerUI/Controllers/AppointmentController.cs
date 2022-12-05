@@ -30,6 +30,18 @@ namespace AppointmentSchedulerUI.Controllers
 
         public IActionResult Dashboard()
         {
+/*            GetAppointmentDTO getAppointmentDTO = new();
+            EmployeeDTO employeeDTO = new();
+            getAppointmentDTO.EmployeeNameList = new List<string>() { "Greg", "John" };
+            employeeDTO.Appointments = new List<int>() { 11, 12 };*/
+            ViewData["EmployeeNameList"] = new List<string>() { "Greg", "John" };
+            ViewData["TimeslotList"] = new List<int>() { 11, 12 };
+            ViewData["JobTypeList"] = new List<string>() { "Massage" };
+            return View();
+        }
+
+        public IActionResult EmployeeOverview()
+        {
             return View();
         }
 

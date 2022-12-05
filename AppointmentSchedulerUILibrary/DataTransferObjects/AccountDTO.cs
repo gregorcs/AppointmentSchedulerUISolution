@@ -20,5 +20,7 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
             Password = password;
             Appointments = appointments;
         }
+
+        public AccountDTO() { }
     }
 }
