@@ -35,9 +35,10 @@ namespace AppointmentSchedulerUI.Controllers
         public async Task<IActionResult> Dashboard(DateTime? date)
         {
             IEnumerable<EmployeeDTO> employeesFound;
+            var testing = date;
             try
             {
-                employeesFound = await _employeeService.GetEmployeesWithAvailableTimeslots(date);
+                employeesFound = await _employeeService.GetEmployeesWithAvailableTimeslots(new DateTime(2022, 12, 1));
             }
             catch (Exception ex)
             {
