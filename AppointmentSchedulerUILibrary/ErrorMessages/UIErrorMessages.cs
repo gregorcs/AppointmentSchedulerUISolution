@@ -10,6 +10,7 @@
         public const string IncorrectCredentials = "The email or password provided is incorrect.";
         public const string AccountCreationFailed = "Account could not be created";
         public const string AppointmentCreationFailed = "Appointment could not be booked!";
+        public const string CouldNotGetEmployeesAndTimeslots = "There was a problem getting the employees and timeslots";
 
     }
 }

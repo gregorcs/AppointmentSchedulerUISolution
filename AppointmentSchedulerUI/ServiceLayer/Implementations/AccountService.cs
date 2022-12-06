@@ -58,6 +58,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             var response = await client.ExecuteAsync(request);
+            //todo maybe return something else then an exception on wrong 
             if (response.IsSuccessStatusCode && response.Content != null)
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };

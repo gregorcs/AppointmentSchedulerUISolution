@@ -1,5 +1,7 @@
 using AppointmentSchedulerUI.Repositories.Implementations;
 using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUI.ServiceLayer.Implementations;
+using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAccountService, AccountService>();
 builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
+builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
 builder.Services.AddAuthentication(CookieHandler.CookieName).AddCookie(CookieHandler.CookieName, options =>
 {
     options.Cookie.Name = CookieHandler.CookieName;

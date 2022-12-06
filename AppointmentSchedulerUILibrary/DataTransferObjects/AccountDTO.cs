@@ -11,9 +11,9 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
         public string? Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public IEnumerable<int>? Appointments { get; set; }
+        public int[]? Appointments { get; set; }
 
-        public AccountDTO(string username, string email, string password, IEnumerable<int> appointments)
+        public AccountDTO(string username, string email, string password, int[] appointments)
         {
             Username = username;
             Email = email;

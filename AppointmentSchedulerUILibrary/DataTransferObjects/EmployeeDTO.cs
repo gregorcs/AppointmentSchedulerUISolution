@@ -12,7 +12,7 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
         public string Role { get; set; }
         public int RoomNumber { get; set; }
 
-        public EmployeeDTO(string username, string email, string password, string role, int roomNumber, IEnumerable<int> appointments)
+        public EmployeeDTO(string username, string email, string password, string role, int roomNumber, int[] appointments)
             : base(username, email, password, appointments)
         {
             Role = role;

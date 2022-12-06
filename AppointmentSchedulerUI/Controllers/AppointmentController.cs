@@ -1,5 +1,6 @@
 ﻿using AppointmentSchedulerUI.Exceptions;
 using AppointmentSchedulerUI.Repositories.Interfaces;
+using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,11 @@ namespace AppointmentSchedulerUI.Controllers
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
-        public AppointmentController(IAppointmentService appointmentService)
+        private readonly IEmployeeService _employeeService;
+        public AppointmentController(IAppointmentService appointmentService, IEmployeeService employeeService)
         {
             this._appointmentService = appointmentService;
+            this._employeeService = employeeService;
         }
 
         public IActionResult Index()
@@ -29,9 +32,24 @@ namespace AppointmentSchedulerUI.Controllers
             return View("DetailsCustomer", _appointmentService.FindById(id));
         }
 
-        public IActionResult Dashboard(DateTime? date)
+        public async Task<IActionResult> Dashboard(DateTime? date)
         {
-            ViewData["EmployeeNameList"] = new List<string>() { "Greg", "John" };
+            IEnumerable<EmployeeDTO> employeesFound;
+            try
+            {
+                employeesFound = await _employeeService.GetEmployeesWithAvailableTimeslots(date);
+            }
+            catch (Exception ex)
+            {
+                return View("Dashboard");
+            }
+            List<string> usernames = new();
+            foreach (EmployeeDTO employee in employeesFound)
+            {
+
+                usernames.Add(employee.Username);
+            }
+            ViewData["EmployeeNameList"] = usernames;
             ViewData["TimeslotList"] = new List<int>() { 11, 12 };
             ViewData["JobTypeList"] = new List<string>() { "Massage" };
             return View();
