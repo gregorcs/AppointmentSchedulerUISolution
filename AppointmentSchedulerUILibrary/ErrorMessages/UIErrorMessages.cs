@@ -9,6 +9,7 @@
         public const string InvalidPassword = "Must contain: at least 8 characters, 1 uppercase letter, 1 number";
         public const string IncorrectCredentials = "The email or password provided is incorrect.";
         public const string AccountCreationFailed = "Account could not be created";
+        public const string AppointmentCreationFailed = "Appointment could not be booked!";
 
     }
 }

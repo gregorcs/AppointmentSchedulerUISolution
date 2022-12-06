@@ -1,4 +1,5 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.Exceptions;
+using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,7 @@ namespace AppointmentSchedulerUI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("RegisterAccount", appointment);
+                return View("Dashboard");
             }
             var result = await _appointmentService.Save(appointment);
             if (result != null && result.IsSuccessStatusCode)
@@ -54,9 +55,8 @@ namespace AppointmentSchedulerUI.Controllers
             }
             else
             {
-/*                ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
-*/                //return View("Dashboard", appointment);
-                return View();
+                ModelState.AddModelError("AppointmentCreatingFailed", UIErrorMessages.AppointmentCreationFailed);
+                return View("Dashboard");
             }
         }
     }
