@@ -63,9 +63,9 @@ namespace AppointmentSchedulerUI.Controllers
 
             //get all the appointment data
             appointment.Date = Request.Cookies["date"];
+            appointment.CustomerId = Convert.ToInt64(claim.Value);
             appointment.AppointmentTypeId = Convert.ToInt64(Request.Cookies["jobType"]);
             appointment.EmployeeId = Convert.ToInt64(Request.Cookies["employeeId"]);
-            appointment.CustomerId = Convert.ToInt64(claim.Value);
             appointment.EmployeeIdList = new Collection<long>();
             appointment.EmployeeIdList.Add(Convert.ToInt64(Request.Cookies["employeeId"]));
             appointment.IsApproved = false;
@@ -137,6 +137,21 @@ namespace AppointmentSchedulerUI.Controllers
             }
             ViewData["TimeslotList"] = timeSlotsFound;
             return View(appointment);
+        }
+
+        public async Task<IActionResult> ViewCreatedAppointments()
+        {
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Id");
+            IEnumerable<GetAppointmentDTO> result;
+            try
+            {
+                result = await _appointmentService.GetAppointmentsByAccountId(Convert.ToInt64(claim.Value));
+            } catch (Exception ex)
+            {
+                return View("Index");
+            }
+            return View(result);
         }
     }
 }
