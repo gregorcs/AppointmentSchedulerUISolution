@@ -13,6 +13,6 @@ namespace AppointmentSchedulerUI.Repositories.Interfaces
 
         Task<IEnumerable<AppointmentTypeDTO>> GetAllAppointmentTypes();
 
-        Task<List<int>> GetTimeSlotsByDay(DateTime date);
+        Task<int[]> GetTimeSlotsByDay(string date, long employeeId);
     }
 }

@@ -76,13 +76,13 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         {
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
 
-            if (!httpContextAccessor.HttpContext.User.IsInRole("Admin") 
+/*            if (!httpContextAccessor.HttpContext.User.Claims.IsInRole("Admin") 
                 || !httpContextAccessor.HttpContext.User.IsInRole("User"))
             {
                 return null;
-            }
+            }*/
 
-            using var client = new RestClient(ServerUrl.EmployeeUrl);
+            using var client = new RestClient(ServerUrl.AppointmentUrl);
             var request = new RestRequest("", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
@@ -90,7 +90,8 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             var body = JsonSerializer.Serialize(entity);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
 
-            return await client.ExecuteAsync(request);
+            var result = await client.ExecuteAsync(request);
+            return result;
         }
 
         public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
@@ -102,7 +103,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
                         {
                             return null;
                         }*/
-            string UrlWithDate = "https://localhost:7052/api/Appointment?dateOfAppointment=2022-12-01";
+            string UrlWithDate = "https://localhost:7052/api/Appointment?dateOfAppointment=2022-";
             using var client = new RestClient(UrlWithDate);
             var request = new RestRequest("GetAllEmployeesAndAvailableTimeSlots", Method.Get);
             request.AddHeader("Content-Type", "application/json");
@@ -155,9 +156,9 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             }
         }
 
-        public async Task<List<int>> GetTimeSlotsByDay(DateTime date)
+        public async Task<int[]> GetTimeSlotsByDay(string date, long employeeId)
         {
-            using var client = new RestClient(ServerUrl.AppointmentUrl + "/timeslot/" + date.Date);
+            using var client = new RestClient("https://localhost:7052/api/v1/Appointment/" + date);
             var request = new RestRequest("", Method.Get);
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
@@ -168,9 +169,16 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 Console.WriteLine(response.Content);
-                return JsonSerializer.Deserialize<List<int>>(response.Content, options);
-            }
-            else
+                var listOfEmployees = JsonSerializer.Deserialize<List<EmployeeDTO>>(response.Content, options);
+                foreach (EmployeeDTO employee in listOfEmployees)
+                {
+                    if (employee.Accounts_Id.Equals(employeeId))
+                    {
+                        return employee.Appointments;
+                    }
+                }
+                return new int[0];
+            } else
             {
                 throw new Exception(response.ErrorMessage);
             }

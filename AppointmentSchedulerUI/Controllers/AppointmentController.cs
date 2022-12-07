@@ -4,6 +4,7 @@ using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
 using System.Configuration;
 
 namespace AppointmentSchedulerUI.Controllers
@@ -59,14 +60,22 @@ namespace AppointmentSchedulerUI.Controllers
 
         public async Task<IActionResult> SaveAppointment(CreateAppointmentDTO appointment)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Dashboard");
-            }
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Id");
+
+            //get all the appointment data
+            appointment.Date = Request.Cookies["date"];
+            appointment.AppointmentTypeId = Convert.ToInt64(Request.Cookies["jobType"]);
+            appointment.EmployeeId = Convert.ToInt64(Request.Cookies["employeeId"]);
+            appointment.CustomerId = Convert.ToInt64(claim.Value);
+            appointment.EmployeeIdList = new Collection<long>();
+            appointment.EmployeeIdList.Add(Convert.ToInt64(Request.Cookies["employeeId"]));
+            appointment.IsApproved = false;
+
             var result = await _appointmentService.Save(appointment);
             if (result != null && result.IsSuccessStatusCode)
             {
-                return View();
+                return View("Index");
             }
             else
             {
@@ -77,7 +86,6 @@ namespace AppointmentSchedulerUI.Controllers
 
         public async Task<IActionResult> DashboardAppointmentType()
         {
-            currentAppointment = new CreateAppointmentDTO();
             IEnumerable<AppointmentTypeDTO> typesFound;
             try
             {
@@ -116,22 +124,26 @@ namespace AppointmentSchedulerUI.Controllers
             //    employees.Add(employee.Username);
             //}
             //ViewData["EmployeeNameList"] = employeesFound;
+            Response.Cookies.Append("jobType", appointment.AppointmentTypeId.ToString());
             ViewBag.EmployeeNameList = employeesFound;
             return View(appointment);
         }
 
         public async Task<IActionResult> DashboardCalendar(CreateAppointmentDTO appointment)
         {
-            currentAppointment.EmployeeId = appointment.EmployeeId;
+            Response.Cookies.Append("employeeId", appointment.EmployeeId.ToString());
             return View(appointment);
         }
 
         public async Task<IActionResult> DashboardTimeslot(CreateAppointmentDTO appointment)
         {
-            List<int> timeSlotsFound;
+            IEnumerable<int> timeSlotsFound;
+            string employeeIdString = Request.Cookies["employeeId"];
+            Response.Cookies.Append("date", appointment.Date.ToString());
             try
             {
-                timeSlotsFound = await _appointmentService.GetTimeSlotsByDay(appointment.Date);
+                timeSlotsFound = await _appointmentService
+                    .GetTimeSlotsByDay(appointment.Date, Convert.ToInt64(employeeIdString));
             }
             catch (Exception ex)
             {

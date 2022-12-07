@@ -22,6 +22,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UseAccess", policy => policy.RequireAssertion(context =>
             context.User.IsInRole("Admin") || context.User.IsInRole("User")));
 });
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -37,7 +38,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
