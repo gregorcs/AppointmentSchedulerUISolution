@@ -1,4 +1,5 @@
 ﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
+using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
@@ -41,6 +42,24 @@ namespace AppointmentSchedulerUI.ServiceLayer.Implementations
         public Task<EmployeeDTO> FindById(long id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<GetEmployeeDTO>> GetEmployeeByAppointmentType(long id)
+        {
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/type/" + id);
+            var request = new RestRequest("", Method.Get);
+
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessStatusCode && response.Content != null)
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                Console.WriteLine(response.Content);
+                return JsonSerializer.Deserialize<IEnumerable<GetEmployeeDTO>>(response.Content, options);
+            }
+            else
+            {
+                throw new Exception(response.ErrorMessage);
+            }
         }
 
         public async Task<IEnumerable<EmployeeDTO>> GetEmployeesWithAvailableTimeslots(DateTime? date)

@@ -16,6 +16,8 @@ namespace AppointmentSchedulerUILibrary.AppointmentDTOs
         public int TimeSlot { get; set; }
         public bool IsApproved { get; set; }
         public long AppointmentTypeId { get; set; }
+        public long AppointmentTypeName { get; set; }
         public IEnumerable<long> EmployeeIdList { get; set; }
+        public long EmployeeId { get; set; }
     }
 }

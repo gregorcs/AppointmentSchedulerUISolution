@@ -12,15 +12,11 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAppointmentService _appointmentService;
         private readonly IEmployeeService _employeeService;
+        private CreateAppointmentDTO currentAppointment;
         public AppointmentController(IAppointmentService appointmentService, IEmployeeService employeeService)
         {
             this._appointmentService = appointmentService;
             this._employeeService = employeeService;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public IActionResult DetailsEmployee(long id)
@@ -77,6 +73,72 @@ namespace AppointmentSchedulerUI.Controllers
                 ModelState.AddModelError("AppointmentCreatingFailed", UIErrorMessages.AppointmentCreationFailed);
                 return View("Dashboard");
             }
+        }
+
+        public async Task<IActionResult> DashboardAppointmentType()
+        {
+            currentAppointment = new CreateAppointmentDTO();
+            IEnumerable<AppointmentTypeDTO> typesFound;
+            try
+            {
+                typesFound = await _appointmentService.GetAllAppointmentTypes();
+            }
+            catch(Exception ex)
+            {
+                return View("Index");
+            }
+            //List<AppointmentTypeDTO> types = new List<AppointmentTypeDTO>();
+            //foreach(AppointmentTypeDTO type in typesFound)
+            //{
+            //    types.Add(type);
+            //}
+            //ViewData["JobTypeList"] = typesFound;
+            ViewBag.JobTypeList = typesFound;
+
+            return View();
+        }
+
+        public async Task<IActionResult> DashboardEmployee(CreateAppointmentDTO appointment)
+        {
+            currentAppointment = appointment;
+            IEnumerable<GetEmployeeDTO> employeesFound;
+            try
+            {
+                employeesFound = await _employeeService.GetEmployeeByAppointmentType(appointment.AppointmentTypeId);
+            }
+            catch (Exception ex)
+            {
+                return View("Index");
+            }
+            //List<string> employees = new List<string>();
+            //foreach (EmployeeDTO employee in employeesFound)
+            //{
+            //    employees.Add(employee.Username);
+            //}
+            //ViewData["EmployeeNameList"] = employeesFound;
+            ViewBag.EmployeeNameList = employeesFound;
+            return View(appointment);
+        }
+
+        public async Task<IActionResult> DashboardCalendar(CreateAppointmentDTO appointment)
+        {
+            currentAppointment.EmployeeId = appointment.EmployeeId;
+            return View(appointment);
+        }
+
+        public async Task<IActionResult> DashboardTimeslot(CreateAppointmentDTO appointment)
+        {
+            List<int> timeSlotsFound;
+            try
+            {
+                timeSlotsFound = await _appointmentService.GetTimeSlotsByDay(appointment.Date);
+            }
+            catch (Exception ex)
+            {
+                return View("Index");
+            }
+            ViewData["TimeslotList"] = timeSlotsFound;
+            return View(appointment);
         }
     }
 }

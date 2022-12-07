@@ -136,5 +136,44 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
             return appointmentList;
         }
+
+        public async Task<IEnumerable<AppointmentTypeDTO>> GetAllAppointmentTypes()
+        {
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/types");
+            var request = new RestRequest("", Method.Get);
+
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessStatusCode && response.Content != null)
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                Console.WriteLine(response.Content);
+                return JsonSerializer.Deserialize<IEnumerable<AppointmentTypeDTO>>(response.Content, options);
+            }
+            else
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+        }
+
+        public async Task<List<int>> GetTimeSlotsByDay(DateTime date)
+        {
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/timeslot/" + date.Date);
+            var request = new RestRequest("", Method.Get);
+            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
+            request.AddHeader("Authorization", claim.Value);
+
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessStatusCode && response.Content != null)
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                Console.WriteLine(response.Content);
+                return JsonSerializer.Deserialize<List<int>>(response.Content, options);
+            }
+            else
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+        }
     }
 }
