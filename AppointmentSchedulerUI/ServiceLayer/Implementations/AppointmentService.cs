@@ -10,15 +10,6 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Net.NetworkInformation;
-
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace AppointmentSchedulerUI.Repositories.Implementations
 {
@@ -76,12 +67,6 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
         {
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
 
-/*            if (!httpContextAccessor.HttpContext.User.Claims.IsInRole("Admin") 
-                || !httpContextAccessor.HttpContext.User.IsInRole("User"))
-            {
-                return null;
-            }*/
-
             using var client = new RestClient(ServerUrl.AppointmentUrl);
             var request = new RestRequest("", Method.Post);
             request.AddHeader("Content-Type", "application/json");
@@ -92,29 +77,6 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
             var result = await client.ExecuteAsync(request);
             return result;
-        }
-
-        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAndAvailableTimeSlots(DateTime date)
-        {
-            HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-
-            /*            if (!httpContextAccessor.HttpContext.User.IsInRole("Admin")
-                            || !httpContextAccessor.HttpContext.User.IsInRole("User"))
-                        {
-                            return null;
-                        }*/
-            string UrlWithDate = "https://localhost:7052/api/Appointment?dateOfAppointment=2022-";
-            using var client = new RestClient(UrlWithDate);
-            var request = new RestRequest("GetAllEmployeesAndAvailableTimeSlots", Method.Get);
-            request.AddHeader("Content-Type", "application/json");
-            var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
-            request.AddHeader("Authorization", claim.Value);
-            var body = JsonSerializer.Serialize(date);
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            //todo, throws not found
-            var response= await client.ExecuteAsync(request);
-            Console.WriteLine(response);
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<GetAppointmentDTO>> GetAppointmentsByAccountId(long id)
@@ -158,7 +120,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
 
         public async Task<int[]> GetTimeSlotsByDay(string date, long employeeId)
         {
-            using var client = new RestClient("https://localhost:7052/api/v1/Appointment/" + date);
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/" + date);
             var request = new RestRequest("", Method.Get);
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");

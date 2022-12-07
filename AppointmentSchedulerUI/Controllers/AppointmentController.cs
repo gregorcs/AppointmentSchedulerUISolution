@@ -1,11 +1,9 @@
-﻿using AppointmentSchedulerUI.Exceptions;
-using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
-using System.Configuration;
 
 namespace AppointmentSchedulerUI.Controllers
 {
@@ -79,8 +77,8 @@ namespace AppointmentSchedulerUI.Controllers
             }
             else
             {
-                ModelState.AddModelError("AppointmentCreatingFailed", UIErrorMessages.AppointmentCreationFailed);
-                return View("Dashboard");
+                //todo add some error view here
+                return View("Index");
             }
         }
 
@@ -95,12 +93,6 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("Index");
             }
-            //List<AppointmentTypeDTO> types = new List<AppointmentTypeDTO>();
-            //foreach(AppointmentTypeDTO type in typesFound)
-            //{
-            //    types.Add(type);
-            //}
-            //ViewData["JobTypeList"] = typesFound;
             ViewBag.JobTypeList = typesFound;
 
             return View();
@@ -118,12 +110,6 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("Index");
             }
-            //List<string> employees = new List<string>();
-            //foreach (EmployeeDTO employee in employeesFound)
-            //{
-            //    employees.Add(employee.Username);
-            //}
-            //ViewData["EmployeeNameList"] = employeesFound;
             Response.Cookies.Append("jobType", appointment.AppointmentTypeId.ToString());
             ViewBag.EmployeeNameList = employeesFound;
             return View(appointment);
