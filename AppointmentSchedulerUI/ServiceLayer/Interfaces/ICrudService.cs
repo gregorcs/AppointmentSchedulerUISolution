@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 
-namespace AppointmentSchedulerUI.Repositories.Interfaces
+namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
 {
     public interface ICrudService<CREATE, READ, DELETE, ID>
     {

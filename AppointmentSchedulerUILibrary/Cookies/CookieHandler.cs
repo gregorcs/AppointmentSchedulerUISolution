@@ -1,4 +1,4 @@
-﻿using AppointmentSchedulerUILibrary.Credentials;
+﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 using System.Security.Claims;
 
 namespace AppointmentSchedulerUILibrary.Cookies

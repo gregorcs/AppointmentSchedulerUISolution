@@ -1,4 +1,4 @@
-﻿namespace AppointmentSchedulerUI.Exceptions
+﻿namespace AppointmentSchedulerUILibrary.ErrorMessages
 {
     public class UIErrorMessages
     {

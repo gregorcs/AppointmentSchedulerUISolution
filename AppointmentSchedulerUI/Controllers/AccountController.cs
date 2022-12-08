@@ -1,8 +1,7 @@
-﻿using AppointmentSchedulerUI.Exceptions;
-using AppointmentSchedulerUI.Repositories.Interfaces;
-using AppointmentSchedulerUILibrary;
+﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.Cookies;
-using AppointmentSchedulerUILibrary.Credentials;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
+using AppointmentSchedulerUILibrary.ErrorMessages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,7 +53,8 @@ namespace AppointmentSchedulerUI.Controllers
             if (result != null && result.IsSuccessStatusCode)
             {
                 return View("RegisterEmployee", credential);
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
                 return View("RegisterEmployee", credential);
@@ -76,7 +76,8 @@ namespace AppointmentSchedulerUI.Controllers
             try
             {
                 response = await _accountService.Authenticate(credential);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 //exception should be logged
                 ModelState.AddModelError("password", ex.Message);
@@ -100,7 +101,7 @@ namespace AppointmentSchedulerUI.Controllers
         }
         public IActionResult LoggedIn()
         {
-            return User.Identity.IsAuthenticated ? RedirectToAction("Dashboard", "Appointment") : RedirectToAction("Login");
+            return User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : RedirectToAction("Login");
         }
 
         public async Task<IActionResult> Logout()

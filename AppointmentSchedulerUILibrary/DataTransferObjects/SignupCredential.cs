@@ -1,8 +1,8 @@
-﻿using AppointmentSchedulerUI.Exceptions;
+﻿using AppointmentSchedulerUILibrary.ErrorMessages;
 using AppointmentSchedulerUILibrary.UIRegex;
 using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentSchedulerUILibrary
+namespace AppointmentSchedulerUILibrary.DataTransferObjects
 {
     public class SignupCredential : LoginCredential
     {

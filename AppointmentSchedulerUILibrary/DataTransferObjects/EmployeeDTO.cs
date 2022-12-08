@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AppointmentSchedulerUILibrary.DataTransferObjects
+﻿namespace AppointmentSchedulerUILibrary.DataTransferObjects
 {
     public class EmployeeDTO : AccountDTO
     {
@@ -19,6 +13,6 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
             RoomNumber = roomNumber;
         }
 
-        public EmployeeDTO() {}
+        public EmployeeDTO() { }
     }
 }

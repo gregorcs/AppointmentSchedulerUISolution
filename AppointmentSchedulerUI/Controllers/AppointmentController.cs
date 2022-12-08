@@ -1,5 +1,4 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
-using AppointmentSchedulerUI.ServiceLayer.Interfaces;
+﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -16,44 +15,6 @@ namespace AppointmentSchedulerUI.Controllers
         {
             this._appointmentService = appointmentService;
             this._employeeService = employeeService;
-        }
-
-        public IActionResult DetailsEmployee(long id)
-        {
-            return View("DetailsEmployee", _appointmentService.FindById(id));
-        }
-        public IActionResult DetailsCustomer(long id)
-        {
-            return View("DetailsCustomer", _appointmentService.FindById(id));
-        }
-
-        public async Task<IActionResult> Dashboard(DateTime? date)
-        {
-            IEnumerable<EmployeeDTO> employeesFound;
-            var testing = date;
-            try
-            {
-                employeesFound = await _employeeService.GetEmployeesWithAvailableTimeslots(new DateTime(2022, 12, 1));
-            }
-            catch (Exception ex)
-            {
-                return View("Dashboard");
-            }
-            List<string> usernames = new();
-            foreach (EmployeeDTO employee in employeesFound)
-            {
-
-                usernames.Add(employee.Username);
-            }
-            ViewData["EmployeeNameList"] = usernames;
-            ViewData["TimeslotList"] = new List<int>() { 11, 12 };
-            ViewData["JobTypeList"] = new List<string>() { "Massage" };
-            return View();
-        }
-
-        public IActionResult EmployeeOverview()
-        {
-            return View();
         }
 
         public async Task<IActionResult> SaveAppointment(CreateAppointmentDTO appointment)
@@ -89,7 +50,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 typesFound = await _appointmentService.GetAllAppointmentTypes();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Index");
             }
@@ -147,7 +108,8 @@ namespace AppointmentSchedulerUI.Controllers
             try
             {
                 result = await _appointmentService.GetAppointmentsByAccountId(Convert.ToInt64(claim.Value));
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return View("Index");
             }

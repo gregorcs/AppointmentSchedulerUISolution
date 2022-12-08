@@ -1,7 +1,6 @@
 ﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System.Text.Json;
 
@@ -69,14 +68,16 @@ namespace AppointmentSchedulerUI.ServiceLayer.Implementations
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
             request.AddHeader("Authorization", claim.Value);
-/*            request.AddParameter(Parameter.CreateParameter("dateOfAppointment", date, ParameterType.GetOrPost));
-*/            var response = await client.ExecuteAsync(request);
+            /*            request.AddParameter(Parameter.CreateParameter("dateOfAppointment", date, ParameterType.GetOrPost));
+            */
+            var response = await client.ExecuteAsync(request);
             if (response.IsSuccessStatusCode && response.Content != null)
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 Console.WriteLine(response.Content);
                 return JsonSerializer.Deserialize<IEnumerable<EmployeeDTO>>(response.Content, options);
-            } else
+            }
+            else
             {
                 throw new Exception(response.ErrorMessage);
             }

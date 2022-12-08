@@ -1,8 +1,7 @@
-﻿using AppointmentSchedulerUILibrary;
-using AppointmentSchedulerUILibrary.Credentials;
+﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 using RestSharp;
 
-namespace AppointmentSchedulerUI.Repositories.Interfaces
+namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
 {
     //todo change ID type to long
     //todo refactor this so it uses a better DTO / or just rename it to DTO

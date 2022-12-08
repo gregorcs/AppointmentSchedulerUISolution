@@ -1,17 +1,13 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUI.Views;
 using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc;
-using AppointmentSchedulerUI.Exceptions;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Linq;
-using System.Net;
 using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace AppointmentSchedulerUI.Repositories.Implementations
+namespace AppointmentSchedulerUI.ServiceLayer.Implementations
 {
     public class AppointmentService : IAppointmentService
     {
@@ -140,7 +136,8 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
                     }
                 }
                 return new int[0];
-            } else
+            }
+            else
             {
                 throw new Exception(response.ErrorMessage);
             }

@@ -1,6 +1,4 @@
-﻿using AppointmentSchedulerUI.Repositories.Interfaces;
-using AppointmentSchedulerUILibrary.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc;
+﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 
 namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
 {

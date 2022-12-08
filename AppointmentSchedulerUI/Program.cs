@@ -1,5 +1,3 @@
-using AppointmentSchedulerUI.Repositories.Implementations;
-using AppointmentSchedulerUI.Repositories.Interfaces;
 using AppointmentSchedulerUI.ServiceLayer.Implementations;
 using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.Cookies;

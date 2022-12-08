@@ -1,9 +1,7 @@
 ﻿using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc;
-using RestSharp;
 
-namespace AppointmentSchedulerUI.Repositories.Interfaces
+namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
 {
     public interface IAppointmentService : ICrudService<CreateAppointmentDTO, GetAppointmentDTO, DeleteAppointmentDTO, long>
     {
