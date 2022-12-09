@@ -10,7 +10,6 @@ namespace AppointmentSchedulerUI.Controllers
     {
         private readonly IAppointmentService _appointmentService;
         private readonly IEmployeeService _employeeService;
-        private CreateAppointmentDTO currentAppointment;
         public AppointmentController(IAppointmentService appointmentService, IEmployeeService employeeService)
         {
             this._appointmentService = appointmentService;
@@ -61,7 +60,6 @@ namespace AppointmentSchedulerUI.Controllers
 
         public async Task<IActionResult> DashboardEmployee(CreateAppointmentDTO appointment)
         {
-            currentAppointment = appointment;
             IEnumerable<GetEmployeeDTO> employeesFound;
             try
             {
