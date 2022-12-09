@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<AppointmentSchedulerUILibrary.AppointmentDTOs.GetAppointmentDTO>
 
 @{
-    ViewData["Title"] = "Created Appointments";
+    ViewData["Title"] = "Appointments";
 }
 
-<h1>Created Appointments</h1>
+<h1>Appointments</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -67,6 +67,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                <!--<a asp-controller="Appointment" asp-action="DetailsCustomer">Details</a> |-->
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })

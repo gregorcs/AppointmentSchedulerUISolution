@@ -1,10 +1,10 @@
 ﻿@model AppointmentSchedulerUILibrary.AppointmentDTOs.GetAppointmentDTO
 
 @{
-    ViewData["Title"] = "DetailsCustomer";
+    ViewData["Title"] = "Appointment Details";
 }
 
-<h1>DetailsCustomer</h1>
+<h1>Appointment Details</h1>
 
 <div>
     <h4>GetAppointmentDTO</h4>
@@ -43,5 +43,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Appointment" asp-action="ViewCreatedAppointments">Back to List</a>
 </div>
