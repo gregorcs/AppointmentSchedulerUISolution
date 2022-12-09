@@ -1,5 +1,6 @@
 ﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 using System.Collections;
+using System.Data;
 
 namespace AppointmentSchedulerUILibrary.AppointmentDTOs
 {
@@ -23,6 +24,11 @@ namespace AppointmentSchedulerUILibrary.AppointmentDTOs
             IsApproved = isApproved;
             Name = name;
             Description = description;
+        }
+
+        public override string ToString()
+        {
+            return $" {Name}, {Date}, {Username}";
         }
     }
 }
