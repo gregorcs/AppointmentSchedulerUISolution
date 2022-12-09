@@ -1,7 +1,7 @@
 ﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 using System.Collections;
 
-namespace AppointmentSchedulerServer.DataTransferObjects
+namespace AppointmentSchedulerUILibrary.AppointmentDTOs
 {
     public class GetAppointmentDTO
     {
@@ -14,11 +14,6 @@ namespace AppointmentSchedulerServer.DataTransferObjects
         public string Name { get; set; }
         public string Description { get; set; }
         public IEnumerable<GetEmployeeDTO> Employees { get; set; }
-
-        public GetAppointmentDTO()
-        {
-
-        }
 
         public GetAppointmentDTO(long id, DateTime date, int timeSlot, bool isApproved, string name, string description)
         {
