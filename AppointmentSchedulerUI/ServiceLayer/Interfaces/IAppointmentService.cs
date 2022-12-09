@@ -1,4 +1,5 @@
-﻿using AppointmentSchedulerUILibrary.AppointmentDTOs;
+﻿using AppointmentSchedulerServer.DataTransferObjects;
+using AppointmentSchedulerUILibrary.AppointmentDTOs;
 using AppointmentSchedulerUILibrary.DataTransferObjects;
 
 namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
