@@ -94,7 +94,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("Index");
             }
-            ViewData["TimeslotList"] = timeSlotsFound;
+            ViewBag.TimeSlotList = timeSlotsFound;
             return View(appointment);
         }
 

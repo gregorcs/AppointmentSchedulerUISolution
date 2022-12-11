@@ -114,9 +114,9 @@ namespace AppointmentSchedulerUI.ServiceLayer.Implementations
             }
         }
 
-        public async Task<int[]> GetTimeSlotsByDay(string date, long employeeId)
+        public async Task<List<int>> GetTimeSlotsByDay(string date, long employeeId)
         {
-            using var client = new RestClient(ServerUrl.AppointmentUrl + "/" + date);
+            using var client = new RestClient(ServerUrl.AppointmentUrl + "/" + date + "/" + employeeId);
             var request = new RestRequest("", Method.Get);
             HttpContextAccessor httpContextAccessor = new HttpContextAccessor();
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
@@ -127,15 +127,9 @@ namespace AppointmentSchedulerUI.ServiceLayer.Implementations
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 Console.WriteLine(response.Content);
-                var listOfEmployees = JsonSerializer.Deserialize<List<EmployeeDTO>>(response.Content, options);
-                foreach (EmployeeDTO employee in listOfEmployees)
-                {
-                    if (employee.Accounts_Id.Equals(employeeId))
-                    {
-                        return employee.Appointments;
-                    }
-                }
-                return new int[0];
+                var listOfAvailableAppointments = JsonSerializer.Deserialize<List<int>>(response.Content, options);
+                
+                return listOfAvailableAppointments;
             }
             else
             {

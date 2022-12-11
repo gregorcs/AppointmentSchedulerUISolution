@@ -2,7 +2,7 @@
 {
     public class GetEmployeeDTO
     {
-        public long Id { get; set; }
+        public long Accounts_Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
@@ -10,7 +10,7 @@
 
         public GetEmployeeDTO(long id, string username, string email, string role, int roomNumber)
         {
-            Id = id;
+            Accounts_Id = id;
             Username = username;
             Email = email;
             Role = role;
