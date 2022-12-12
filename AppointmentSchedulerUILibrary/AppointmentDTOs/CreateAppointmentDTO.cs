@@ -12,5 +12,6 @@ namespace AppointmentSchedulerUILibrary.AppointmentDTOs
         public long AppointmentTypeName { get; set; }
         public Collection<long>? EmployeeIdList { get; set; }
         public long EmployeeId { get; set; }
+        public string Message { get; set; }
     }
 }
