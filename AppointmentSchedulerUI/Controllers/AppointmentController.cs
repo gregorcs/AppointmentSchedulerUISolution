@@ -67,7 +67,7 @@ namespace AppointmentSchedulerUI.Controllers
             }
             catch (Exception ex)
             {
-                return View("Index");
+                return View("DashboardAppointmentType");
             }
             Response.Cookies.Append("jobType", appointment.AppointmentTypeId.ToString());
             ViewBag.EmployeeNameList = employeesFound;
@@ -84,6 +84,10 @@ namespace AppointmentSchedulerUI.Controllers
         {
             IEnumerable<int> timeSlotsFound;
             string employeeIdString = Request.Cookies["employeeId"];
+            if(appointment.Date == null)
+            {
+                return View("DashboardCalendar");
+            }
             Response.Cookies.Append("date", appointment.Date.ToString());
             try
             {

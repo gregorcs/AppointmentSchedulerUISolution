@@ -15,12 +15,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label for="datetime">Available time slots:</label>
-                @Html.DropDownListFor(model => model.TimeSlot, new SelectList(ViewBag.TimeSlotList));
+                @Html.DropDownListFor(model => model.TimeSlot, new SelectList(ViewBag.TimeSlotList))
             </div>
             <div class="form-group">
-                <label for="details">Message</label>
-                <textarea></textarea>
-            </div>
+                <label asp-for="Message" class="control-label"></label>
+                <input asp-for="Message" class="form-control" />
+
             <input type="submit" value="Save appointment" class="btn btn-primary">
         </form>
         </>
