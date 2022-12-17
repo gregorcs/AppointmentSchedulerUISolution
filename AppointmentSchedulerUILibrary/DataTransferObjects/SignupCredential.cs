@@ -16,6 +16,5 @@ namespace AppointmentSchedulerUILibrary.DataTransferObjects
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
         [Compare("Password", ErrorMessage = UIErrorMessages.PasswordNotMatch)]
         public string ConfirmPassword { get; set; }
-        //todo add password + confirm password
     }
 }

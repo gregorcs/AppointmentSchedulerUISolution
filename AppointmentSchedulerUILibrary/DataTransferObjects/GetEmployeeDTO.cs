@@ -8,9 +8,9 @@
         public string Role { get; set; }
         public int RoomNumber { get; set; }
 
-        public GetEmployeeDTO(long id, string username, string email, string role, int roomNumber)
+        public GetEmployeeDTO(long accounts_Id, string username, string email, string role, int roomNumber)
         {
-            Accounts_Id = id;
+            Accounts_Id = accounts_Id;
             Username = username;
             Email = email;
             Role = role;
@@ -22,7 +22,5 @@
             return $" {Username}, {Role}, {Email}, {RoomNumber}";
         }
     }
-
-
 }
 
