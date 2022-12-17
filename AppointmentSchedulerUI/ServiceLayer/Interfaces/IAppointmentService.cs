@@ -1,8 +1,15 @@
 ﻿using AppointmentSchedulerUILibrary.AppointmentDTOs;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
 
-namespace AppointmentSchedulerUI.Repositories.Interfaces
+namespace AppointmentSchedulerUI.ServiceLayer.Interfaces
 {
     public interface IAppointmentService : ICrudService<CreateAppointmentDTO, GetAppointmentDTO, DeleteAppointmentDTO, long>
     {
+
+        Task<IEnumerable<GetAppointmentDTO>> GetAppointmentsByAccountId(long accountId);
+
+        Task<IEnumerable<AppointmentTypeDTO>> GetAllAppointmentTypes();
+
+        Task<List<int>> GetTimeSlotsByDay(string date, long employeeId);
     }
 }

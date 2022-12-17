@@ -1,0 +1,24 @@
+﻿@model AppointmentSchedulerUILibrary.AppointmentDTOs.CreateAppointmentDTO
+@using System.Collections
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Choose employee";
+}
+
+<h2>Choose employee</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="DashboardCalendar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="employees">Employee:</label>
+                @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.EmployeeNameList, "Accounts_Id","Username"))
+            </div>
+            <input type="submit" value="Select Employee" class="btn btn-primary">
+        </form>
+        </>
+    </div>
+</div>

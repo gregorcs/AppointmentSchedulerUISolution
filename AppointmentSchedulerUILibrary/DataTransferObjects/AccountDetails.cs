@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentSchedulerUILibrary.Credentials
+namespace AppointmentSchedulerUILibrary.DataTransferObjects
 {
     public class AccountDetails
     {
@@ -13,5 +8,7 @@ namespace AppointmentSchedulerUILibrary.Credentials
         public string JwtToken { get; set; }
         [Required]
         public string Role { get; set; }
+        [Required]
+        public long Id { get; set; }
     }
 }

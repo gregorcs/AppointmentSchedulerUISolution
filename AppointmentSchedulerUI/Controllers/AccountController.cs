@@ -1,8 +1,7 @@
-﻿using AppointmentSchedulerUI.Exceptions;
-using AppointmentSchedulerUI.Repositories.Interfaces;
-using AppointmentSchedulerUILibrary;
+﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUILibrary.Cookies;
-using AppointmentSchedulerUILibrary.Credentials;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
+using AppointmentSchedulerUILibrary.ErrorMessages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +9,11 @@ namespace AppointmentSchedulerUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountService _accountDAO;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountService accountDAO)
+        public AccountController(IAccountService accountService)
         {
-            _accountDAO = accountDAO;
+            _accountService = accountService;
         }
 
         public IActionResult RegisterAccount()
@@ -33,7 +32,7 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterAccount", credential);
             }
-            var result = await _accountDAO.Save(credential);
+            var result = await _accountService.Save(credential);
             if (result.IsSuccessStatusCode)
             {
                 return await Authenticate(credential);
@@ -50,11 +49,12 @@ namespace AppointmentSchedulerUI.Controllers
             {
                 return View("RegisterEmployee", credential);
             }
-            var result = await _accountDAO.SaveEmployee(credential);
+            var result = await _accountService.SaveEmployee(credential);
             if (result != null && result.IsSuccessStatusCode)
             {
                 return View("RegisterEmployee", credential);
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("ConfirmPassword", UIErrorMessages.AccountCreationFailed);
                 return View("RegisterEmployee", credential);
@@ -75,8 +75,9 @@ namespace AppointmentSchedulerUI.Controllers
             AccountDetails response;
             try
             {
-                response = await _accountDAO.Authenticate(credential);
-            } catch (Exception ex)
+                response = await _accountService.Authenticate(credential);
+            }
+            catch (Exception ex)
             {
                 //exception should be logged
                 ModelState.AddModelError("password", ex.Message);
@@ -100,7 +101,7 @@ namespace AppointmentSchedulerUI.Controllers
         }
         public IActionResult LoggedIn()
         {
-            return User.Identity.IsAuthenticated ? RedirectToAction("Dashboard", "Appointment") : RedirectToAction("Login");
+            return User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : RedirectToAction("Login");
         }
 
         public async Task<IActionResult> Logout()
@@ -109,6 +110,6 @@ namespace AppointmentSchedulerUI.Controllers
             return RedirectToAction("", "Home");
         }
 
-        public async Task<IActionResult> ListOfUsers() => View(await _accountDAO.FindAll());
+        public async Task<IActionResult> ListOfUsers() => View(await _accountService.FindAll());
     }
 }

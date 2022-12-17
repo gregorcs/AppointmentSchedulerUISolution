@@ -1,15 +1,12 @@
-﻿using AppointmentSchedulerUI.Exceptions;
-using AppointmentSchedulerUI.Repositories.Interfaces;
+﻿using AppointmentSchedulerUI.ServiceLayer.Interfaces;
 using AppointmentSchedulerUI.Views;
-using AppointmentSchedulerUILibrary;
-using AppointmentSchedulerUILibrary.Credentials;
-using Microsoft.AspNetCore.Authorization;
+using AppointmentSchedulerUILibrary.DataTransferObjects;
+using AppointmentSchedulerUILibrary.ErrorMessages;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
-using System.Security.Claims;
 using System.Text.Json;
 
-namespace AppointmentSchedulerUI.Repositories.Implementations
+namespace AppointmentSchedulerUI.ServiceLayer.Implementations
 {
     public class AccountService : IAccountService
     {
@@ -37,7 +34,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
                 return null;
             }
 
-            using var client = new RestClient(ServerUrl.EmployoeeUrl);
+            using var client = new RestClient(ServerUrl.EmployeeUrl);
             var request = new RestRequest("", Method.Post);
             request.AddHeader("Content-Type", "application/json");
             var claim = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "Bearer");
@@ -58,6 +55,7 @@ namespace AppointmentSchedulerUI.Repositories.Implementations
             var body = JsonSerializer.Serialize(credentials);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             var response = await client.ExecuteAsync(request);
+            //todo maybe return something else then an exception on wrong 
             if (response.IsSuccessStatusCode && response.Content != null)
             {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };

@@ -1,4 +1,4 @@
-﻿using AppointmentSchedulerUILibrary.Credentials;
+﻿using AppointmentSchedulerUILibrary.DataTransferObjects;
 using System.Security.Claims;
 
 namespace AppointmentSchedulerUILibrary.Cookies
@@ -10,9 +10,10 @@ namespace AppointmentSchedulerUILibrary.Cookies
         {
             var claims = new List<Claim>
                 {
+                    new Claim("Id", accountDetails.Id.ToString()),
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, "User"),
-                    new Claim("Bearer", "bearer " + accountDetails.JwtToken)
+                    new Claim("Bearer", "bearer " + accountDetails.JwtToken),
                 };
             var identity = new ClaimsIdentity(claims, CookieName);
             return new(identity);
@@ -22,6 +23,7 @@ namespace AppointmentSchedulerUILibrary.Cookies
         {
             var claims = new List<Claim>
                 {
+                    new Claim("Id", accountDetails.Id.ToString()),
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, "Admin"),
                     new Claim("Bearer", "bearer " + accountDetails.JwtToken)

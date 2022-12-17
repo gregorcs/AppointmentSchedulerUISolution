@@ -1,8 +1,8 @@
-﻿using AppointmentSchedulerUI.Exceptions;
+﻿using AppointmentSchedulerUILibrary.ErrorMessages;
 using AppointmentSchedulerUILibrary.UIRegex;
 using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentSchedulerUILibrary
+namespace AppointmentSchedulerUILibrary.DataTransferObjects
 {
     public class SignupCredential : LoginCredential
     {
@@ -16,6 +16,5 @@ namespace AppointmentSchedulerUILibrary
         [StringLength(50, ErrorMessage = UIErrorMessages.LengthExceeded)]
         [Compare("Password", ErrorMessage = UIErrorMessages.PasswordNotMatch)]
         public string ConfirmPassword { get; set; }
-        //todo add password + confirm password
     }
 }
